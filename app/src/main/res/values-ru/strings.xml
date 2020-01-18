@@ -1,0 +1,25 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="miles_per_hour">ми/ч</string>
+    <string name="km_per_hour">км/ч</string>
+    <string name="northerly">С</string>
+    <string name="north_westerly">СЗ</string>
+    <string name="westerly">З</string>
+    <string name="south_westerly">ЮЗ</string>
+    <string name="southerly">Ю</string>
+    <string name="south_easterly">ЮВ</string>
+    <string name="easterly">В</string>
+    <string name="north_easterly">СВ</string>
+    <string name="meters_per_second">м/с</string>
+    <string name="mmhg">мм рт.ст</string>
+    <string name="hpa">гПа</string>
+    <string name="mbar">мбар</string>
+
+    <string name="feels_like">Ощущается как:</string>
+    <string name="visibility">Видимость:</string>
+    <string name="pressure">Давление:</string>
+    <string name="wind">Ветер:</string>
+    <string name="humidity">Влажность:</string>
+    <string name="km" >км</string>
+    <string name="miles" >ми</string>
+</resources>

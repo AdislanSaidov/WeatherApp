@@ -1,0 +1,26 @@
+<resources>
+    <string name="app_name">WeatherApp</string>
+    <string name="miles_per_hour">mph</string>
+    <string name="km_per_hour">km/h</string>
+    <string name="meters_per_second">m/s</string>
+
+    <string name="northerly">N</string>
+    <string name="north_westerly">NW</string>
+    <string name="westerly">W</string>
+    <string name="south_westerly">SW</string>
+    <string name="southerly">S</string>
+    <string name="south_easterly">SE</string>
+    <string name="easterly">E</string>
+    <string name="north_easterly">NE</string>
+    <string name="mmhg">mmHg</string>
+    <string name="hpa">hpa</string>
+    <string name="mbar">mbar</string>
+
+    <string name="feels_like">Feels like:</string>
+    <string name="visibility">Visibility:</string>
+    <string name="pressure">Pressure:</string>
+    <string name="wind">Wind:</string>
+    <string name="humidity">Humidity:</string>
+    <string name="km" >km</string>
+    <string name="miles" >mi</string>
+</resources>
