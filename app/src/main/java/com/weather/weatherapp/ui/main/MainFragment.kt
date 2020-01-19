@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentManager
 import androidx.navigation.findNavController
 import androidx.navigation.ui.AppBarConfiguration
@@ -16,7 +17,7 @@ import com.weather.weatherapp.databinding.FragmentMainBinding
 import com.weather.weatherapp.ui.base.BaseFragment
 
 
-class MainFragment : BaseFragment(), FragmentManager.OnBackStackChangedListener {
+class MainFragment : Fragment(), FragmentManager.OnBackStackChangedListener {
 
     private lateinit var fragmentMainBinding: FragmentMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration

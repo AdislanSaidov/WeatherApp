@@ -19,11 +19,7 @@ import javax.inject.Singleton
 import com.weather.weatherapp.ui.splash.SplashNavigator as SplashNavigator
 
 @Module
-class AppModule(private val app: App) {
-
-    @Provides
-    @Singleton
-    fun provideContext(): Context = app
+class AppModule {
 
     @Provides
     fun provideSimpleDateFormat(): SimpleDateFormat {

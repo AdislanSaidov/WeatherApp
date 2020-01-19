@@ -7,17 +7,19 @@ import android.os.Handler
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.navigation.findNavController
 import com.google.android.gms.location.*
 import com.google.android.material.snackbar.Snackbar
-import com.weather.weatherapp.App
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSplashBinding
 import com.weather.weatherapp.ui.base.BaseFragment
 import com.weather.weatherapp.utils.PermissionUtil
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import timber.log.Timber
@@ -31,7 +33,7 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
     lateinit var splashPresenter: SplashPresenter
     private lateinit var fragmentSplashBinding: FragmentSplashBinding
     private lateinit var fusedLocationClient: FusedLocationProviderClient
-    lateinit var locationRequest: LocationRequest
+    private lateinit var locationRequest: LocationRequest
     lateinit var locationCallback: LocationCallback
     var wayLatitude = 0.0
     var wayLongitude = 0.0
@@ -64,7 +66,6 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.inject(this)
         splashPresenter.setNavigator(this)
         super.onCreate(savedInstanceState)
     }
@@ -129,6 +130,5 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
         }, 1500)
 
     }
-
 
 }

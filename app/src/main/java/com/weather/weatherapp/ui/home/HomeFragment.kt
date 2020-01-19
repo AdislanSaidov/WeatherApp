@@ -1,5 +1,6 @@
 package com.weather.weatherapp.ui.home
 
+import android.content.Context
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -10,25 +11,24 @@ import com.weather.weatherapp.App
 import com.weather.weatherapp.databinding.FragmentHomeBinding
 import com.weather.weatherapp.domain.models.UiWeatherData
 import com.weather.weatherapp.ui.base.BaseFragment
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
+import dagger.android.support.AndroidSupportInjection
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 
-class HomeFragment : BaseFragment(), HomeMvpView {
+class HomeFragment : BaseFragment(), HomeMvpView{
 
     private lateinit var fragmentHomeBinding: FragmentHomeBinding
+
     @Inject
     @InjectPresenter
     lateinit var mainPresenter: HomePresenter
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        App.appComponent.inject(this)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         fragmentHomeBinding = FragmentHomeBinding.inflate(inflater)
 
         return fragmentHomeBinding.root
@@ -56,4 +56,5 @@ class HomeFragment : BaseFragment(), HomeMvpView {
 
     @ProvidePresenter
     fun providePresenter(): HomePresenter = mainPresenter
+
 }

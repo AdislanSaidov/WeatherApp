@@ -5,15 +5,19 @@ import com.weather.weatherapp.di.component.AppComponent
 import com.weather.weatherapp.di.component.DaggerAppComponent
 import com.weather.weatherapp.di.module.AppModule
 import com.weather.weatherapp.di.module.DataModule
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import timber.log.Timber
 import timber.log.Timber.DebugTree
+import javax.inject.Inject
 
-class App : Application() {
 
-    companion object{
-        lateinit var appComponent: AppComponent
-    }
+class App : Application(), HasAndroidInjector {
 
+
+    @Inject
+    lateinit var dispatchingAndroidInjector: DispatchingAndroidInjector<Any>
 
     override fun onCreate() {
         super.onCreate()
@@ -21,11 +25,14 @@ class App : Application() {
             Timber.plant(DebugTree())
         }
 
-        appComponent = DaggerAppComponent
+        DaggerAppComponent
             .builder()
-            .appModule(AppModule(this))
-            .dataModule(DataModule())
+            .application(this)
+            .appContext(this)
             .build()
+            .inject(this)
     }
+
+    override fun androidInjector(): AndroidInjector<Any> = dispatchingAndroidInjector
 
 }
