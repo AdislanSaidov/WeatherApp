@@ -21,11 +21,6 @@ import com.weather.weatherapp.ui.splash.SplashNavigator as SplashNavigator
 class AppModule {
 
     @Provides
-    fun provideSimpleDateFormat(): SimpleDateFormat {
-        return SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.ROOT)
-    }
-
-    @Provides
     fun provideCompositeDisposable(): CompositeDisposable {
         return CompositeDisposable()
     }
@@ -33,20 +28,6 @@ class AppModule {
     @Provides
     @Singleton
     fun provideResourceManager(context: Context): ResourceManager = ResourceManager(context)
-
-    @Provides
-    fun provideWeatherDataMapper(resourceManager: ResourceManager, metricsConverter: MetricsConverter, config: Config): WeatherDataMapper
-            = WeatherDataMapper(
-        resourceManager,
-        metricsConverter,
-        config
-    )
-
-    @Provides
-    fun provideHomePresenter(repository: Repository, weatherDataMapper: WeatherDataMapper): HomePresenter = HomePresenter(repository, weatherDataMapper)
-
-
-
 
 
 }

@@ -11,6 +11,6 @@ abstract class FragmentBindingModule {
     @ContributesAndroidInjector(modules = [SplashModule::class])
     abstract fun contributeSplashFragment(): SplashFragment
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [HomeModule::class])
     abstract fun contributeHomeFragment(): HomeFragment
 }
