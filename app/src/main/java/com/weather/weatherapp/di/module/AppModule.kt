@@ -1,7 +1,6 @@
 package com.weather.weatherapp.di.module
 
 import android.content.Context
-import com.weather.weatherapp.App
 import com.weather.weatherapp.data.datasource.Repository
 import com.weather.weatherapp.data.models.Config
 import com.weather.weatherapp.ui.home.HomePresenter
@@ -46,11 +45,8 @@ class AppModule {
     @Provides
     fun provideHomePresenter(repository: Repository, weatherDataMapper: WeatherDataMapper): HomePresenter = HomePresenter(repository, weatherDataMapper)
 
-//    @Provides
-//    fun provideSplashNavigator(splashFragment: SplashFragment): SplashNavigator = splashFragment
 
-    @Provides
-    fun provideSplashPresenter(repository: Repository): SplashPresenter = SplashPresenter(repository)
-//    fun provideSplashPresenter(repository: Repository, splashNavigator: SplashNavigator): SplashPresenter = SplashPresenter(repository, splashNavigator)
+
+
 
 }

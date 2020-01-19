@@ -10,7 +10,6 @@ import com.weather.weatherapp.di.module.FragmentBindingModule
 import dagger.BindsInstance
 import dagger.Component
 import dagger.android.AndroidInjectionModule
-import dagger.android.support.AndroidSupportInjection
 import javax.inject.Singleton
 
 @Singleton
@@ -18,10 +17,7 @@ import javax.inject.Singleton
     FragmentBindingModule::class, AndroidInjectionModule::class,
     ActivityBindingModule::class])
 interface AppComponent {
-//    fun inject(activity: MainActivity)
 
-    //    fun inject(fragment: HomeFragment)
-//    fun inject(fragment: SplashFragment)
     @Component.Builder
     interface Builder {
         @BindsInstance

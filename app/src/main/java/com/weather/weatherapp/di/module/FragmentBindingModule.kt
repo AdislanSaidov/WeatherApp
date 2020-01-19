@@ -8,7 +8,7 @@ import dagger.android.ContributesAndroidInjector
 @Module
 abstract class FragmentBindingModule {
 
-    @ContributesAndroidInjector
+    @ContributesAndroidInjector(modules = [SplashModule::class])
     abstract fun contributeSplashFragment(): SplashFragment
 
     @ContributesAndroidInjector

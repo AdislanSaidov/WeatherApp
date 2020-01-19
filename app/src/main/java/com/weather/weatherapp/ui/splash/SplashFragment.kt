@@ -65,11 +65,6 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        splashPresenter.setNavigator(this)
-        super.onCreate(savedInstanceState)
-    }
-
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
 
         fragmentSplashBinding = FragmentSplashBinding.inflate(inflater)
