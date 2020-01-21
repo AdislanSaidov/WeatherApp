@@ -4,6 +4,7 @@ import android.Manifest
 import android.content.pm.PackageManager
 import android.os.Bundle
 import android.os.Handler
+import android.os.Looper
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,10 +17,6 @@ import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSplashBinding
 import com.weather.weatherapp.ui.base.BaseFragment
 import com.weather.weatherapp.utils.PermissionUtil
-import dagger.android.AndroidInjector
-import dagger.android.DispatchingAndroidInjector
-import dagger.android.HasAndroidInjector
-import dagger.android.support.AndroidSupportInjection
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import timber.log.Timber
@@ -56,7 +53,7 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
                     if (location != null) {
                         wayLatitude = location.latitude
                         wayLongitude = location.longitude
-
+                        Timber.e("lat: $wayLatitude  lon: $wayLongitude")
                         fusedLocationClient.removeLocationUpdates(locationCallback)
                     }
                 }
@@ -72,6 +69,7 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
         fragmentSplashBinding.btn.setOnClickListener {
             splashPresenter.onLocationKnown()
         }
+//        fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback)
 
         return fragmentSplashBinding.root
     }
@@ -90,10 +88,16 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
             } else {
                 requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
                 initLocation()
+
             }
         } else {
             initLocation()
             splashPresenter.onLocationKnown()
+            Timber.e("aaaaaaa")
+            fusedLocationClient.lastLocation.addOnSuccessListener(activity!!) { location -> Timber.e("lat: ${location?.latitude}  lon: ${location?.longitude}")};
+            val locationRequest = LocationRequest.create()
+            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
+
         }
     }
 
@@ -119,6 +123,7 @@ class SplashFragment : BaseFragment(), SplashMvpView, SplashNavigator {
     }
 
     override fun navigateToMain() {
+
         Handler().postDelayed({
             val a = activity as AppCompatActivity
             a.findNavController(R.id.nav_host_fragment).navigate(SplashFragmentDirections.actionSplashFragmentToMainFragment())

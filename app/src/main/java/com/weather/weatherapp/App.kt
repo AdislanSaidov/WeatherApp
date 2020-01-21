@@ -1,10 +1,7 @@
 package com.weather.weatherapp
 
 import android.app.Application
-import com.weather.weatherapp.di.component.AppComponent
 import com.weather.weatherapp.di.component.DaggerAppComponent
-import com.weather.weatherapp.di.module.AppModule
-import com.weather.weatherapp.di.module.DataModule
 import dagger.android.AndroidInjector
 import dagger.android.DispatchingAndroidInjector
 import dagger.android.HasAndroidInjector

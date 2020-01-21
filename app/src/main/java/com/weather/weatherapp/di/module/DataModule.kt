@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.SharedPreferences
 import com.weather.weatherapp.data.api.ApiService
 import com.weather.weatherapp.data.api.TokenInterceptor
+import com.weather.weatherapp.data.datasource.LocationProvider
 import com.weather.weatherapp.data.datasource.Repository
 import com.weather.weatherapp.data.datasource.local.PrefsManager
 import com.weather.weatherapp.data.datasource.remote.RemoteDataSource
@@ -67,7 +68,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRepository(remoteDataSource: RemoteDataSource, prefsManager: PrefsManager, config: Config): Repository = Repository(remoteDataSource, prefsManager, config)
+    fun provideRepository(remoteDataSource: RemoteDataSource, prefsManager: PrefsManager, locationProvider: LocationProvider, config: Config): Repository = Repository(remoteDataSource, prefsManager, locationProvider, config)
 
     @Provides
     @Singleton
