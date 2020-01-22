@@ -18,6 +18,8 @@ android {
 
         buildConfigField("String", "CITY_ID", CITY_ID)
         buildConfigField("String", "API_KEY", API_KEY)
+
+        vectorDrawables.useSupportLibrary = true
     }
 
     buildTypes {

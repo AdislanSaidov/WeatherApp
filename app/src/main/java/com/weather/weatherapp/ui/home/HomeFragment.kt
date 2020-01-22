@@ -5,12 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import com.bumptech.glide.Glide
+import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentHomeBinding
 import com.weather.weatherapp.domain.models.UiWeatherData
 import com.weather.weatherapp.ui.base.BaseFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -23,8 +26,11 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     lateinit var mainPresenter: HomePresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        fragmentHomeBinding = FragmentHomeBinding.inflate(inflater)
+        val contextThemeWrapper = ContextThemeWrapper(activity, R.style.AppTheme_NoActionBar)
 
+        val localInflater = inflater.cloneInContext(contextThemeWrapper)
+
+        fragmentHomeBinding = FragmentHomeBinding.inflate(localInflater)
         return fragmentHomeBinding.root
     }
 

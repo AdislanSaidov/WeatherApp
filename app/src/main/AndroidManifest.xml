@@ -11,7 +11,8 @@
         android:supportsRtl="false"
         android:name="com.weather.weatherapp.App"
         android:theme="@style/AppTheme.NoActionBar">
-        <activity android:name="com.weather.weatherapp.ui.main.MainActivity">
+        <activity android:name="com.weather.weatherapp.ui.main.MainActivity"
+            android:theme="@style/SplashTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
