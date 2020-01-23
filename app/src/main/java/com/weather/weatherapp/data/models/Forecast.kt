@@ -7,10 +7,10 @@ import com.google.gson.annotations.SerializedName
 data class Forecast (
     @SerializedName("dt")
     @Expose
-    var dt: Int? = null,
+    var dt: Int = 0,
     @SerializedName("main")
     @Expose
-    var main: Main? = null,
+    var main: Main = Main(),
     @SerializedName("weather")
     @Expose
     var weather: List<Weather>? = null,

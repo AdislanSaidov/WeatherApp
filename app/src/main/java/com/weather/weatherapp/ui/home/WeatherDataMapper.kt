@@ -1,10 +1,8 @@
 package com.weather.weatherapp.ui.home
 
+import com.weather.weatherapp.data.models.*
+import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.domain.models.UiWeatherData
-import com.weather.weatherapp.data.models.Config
-import com.weather.weatherapp.data.models.Weather
-import com.weather.weatherapp.data.models.WeatherData
-import com.weather.weatherapp.data.models.Wind
 import com.weather.weatherapp.utils.*
 import com.weather.weatherapp.utils.Constants.CELSIUS
 import com.weather.weatherapp.utils.Constants.FAHRENHEIT
@@ -14,6 +12,9 @@ import com.weather.weatherapp.utils.Constants.MBAR
 import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
+import java.text.SimpleDateFormat
+import java.util.*
+import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class WeatherDataMapper(
@@ -40,8 +41,31 @@ class WeatherDataMapper(
         )
     }
 
-    private fun convertPressure(pressure: Int): String{
-        return when(config.pressureMetric){
+    fun toUiModel(forecastData: ForecastData): List<UiForecast> {
+        val forecasts = ArrayList<UiForecast>()
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val date = Date()
+        sdf.format(date)
+        forecastData.list.forEach { fd ->
+            val weather = fd.weather?.get(0) ?: Weather()
+            weather.icon = "http://openweathermap.org/img/wn/${weather.icon}@2x.png"
+            weather.description = weather.description.capitalize()
+            date.time = (fd.dt * 1000).toLong()
+            forecasts.add(
+                UiForecast(
+                    temp = convertTemp(fd.main.temp),
+                    dt = sdf.format(date),
+                    weather = weather
+                )
+            )
+        }
+
+        return forecasts
+    }
+
+
+    private fun convertPressure(pressure: Int): String {
+        return when (config.pressureMetric) {
             MBAR -> "${metricsConverter.toMbar(Hpa(pressure))} ${resourceManager.pressureMbar()}"
             MMHG -> "${metricsConverter.toMmhg(Hpa(pressure))} ${resourceManager.pressureMmhg()}"
             HPA -> "$pressure ${resourceManager.pressureHpa()}"

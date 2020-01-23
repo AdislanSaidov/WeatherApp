@@ -11,12 +11,16 @@ class HomePresenter(private val repository: Repository, private val weatherDataM
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         fetchWeatherData()
+        fetchForecastData()
     }
 
-    fun fetchForecastData(){
+    private fun fetchForecastData(){
         disposable.add(repository.fetchForecastData()
             .compose(RxUtils.singleAsync())
-            .subscribe())
+            .subscribe({ forecastData ->
+                val forecasts = weatherDataMapper.toUiModel(forecastData)
+                viewState.showForecastData(forecasts)
+            }, Timber::e))
     }
 
     private fun fetchWeatherData(){

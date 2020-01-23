@@ -3,7 +3,7 @@ package com.weather.weatherapp.data.datasource
 import com.weather.weatherapp.data.datasource.local.PrefsManager
 import com.weather.weatherapp.data.datasource.remote.RemoteDataSource
 import com.weather.weatherapp.data.models.Config
-import com.weather.weatherapp.data.models.Forecast
+import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
 import io.reactivex.Single
 import retrofit2.Response
@@ -14,8 +14,11 @@ class Repository(
     private val config: Config
 ) {
 
-    fun fetchForecastData(): Single<Response<Forecast>> {
-        return remoteDataSource.fetchForecastData(config.id, config.lang)
+    fun fetchForecastData(): Single<ForecastData> {
+        return remoteDataSource.fetchForecastDataByCoords(
+            units = config.units, lang = config.lang,
+            lat = config.coords.lat, lon = config.coords.lon
+        )
     }
 
     fun fetchWeatherData(): Single<WeatherData> {
