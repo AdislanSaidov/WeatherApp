@@ -2,6 +2,7 @@ package com.weather.weatherapp.di.module
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.google.android.gms.location.FusedLocationProviderClient
 import com.weather.weatherapp.data.api.ApiService
 import com.weather.weatherapp.data.api.TokenInterceptor
 import com.weather.weatherapp.data.datasource.LocationProvider
@@ -68,7 +69,7 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRepository(remoteDataSource: RemoteDataSource, prefsManager: PrefsManager, locationProvider: LocationProvider, config: Config): Repository = Repository(remoteDataSource, prefsManager, locationProvider, config)
+    fun provideRepository(remoteDataSource: RemoteDataSource, prefsManager: PrefsManager, config: Config): Repository = Repository(remoteDataSource, prefsManager, config)
 
     @Provides
     @Singleton

@@ -14,5 +14,6 @@ class Config(
     var visibilityMetric: Int = VISIBILITY_METRIC_DEFAULT_VALUE,
     var windMetric: Int = WIND_METRIC_DEFAULT_VALUE,
     var tempMetric: Int = TEMP_METRIC_DEFAULT_VALUE,
-    var pressureMetric: Int = TEMP_METRIC_DEFAULT_VALUE
+    var pressureMetric: Int = TEMP_METRIC_DEFAULT_VALUE,
+    var coords: Coord = Coord()
 )

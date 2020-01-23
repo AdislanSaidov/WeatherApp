@@ -12,6 +12,7 @@ import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.core.view.GravityCompat
 import androidx.navigation.NavGraph
+import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
@@ -22,61 +23,39 @@ import com.google.android.gms.location.*
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.ActivityMainBinding
 import com.weather.weatherapp.utils.PermissionUtil
+import dagger.android.AndroidInjection
+import dagger.android.AndroidInjector
+import dagger.android.DispatchingAndroidInjector
+import dagger.android.HasAndroidInjector
 import moxy.MvpAppCompatActivity
+import moxy.presenter.InjectPresenter
+import moxy.presenter.ProvidePresenter
 import timber.log.Timber
+import javax.inject.Inject
 
 
-class MainActivity : MvpAppCompatActivity() {
+class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
     private lateinit var activityMainBinding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    lateinit var locationCallback: LocationCallback
-    var wayLatitude = 0.0
-    var wayLongitude = 0.0
+    @Inject
+    lateinit var androidInjector: DispatchingAndroidInjector<Any>
+    @InjectPresenter
+    @Inject
+    lateinit var mainPresenter: MainPresenter
 
     companion object {
         private const val REQUEST_CODE_LOCATION = 111
-        init {
-            AppCompatDelegate.setCompatVectorFromResourcesEnabled(true);
-        }
-    }
-
-    private fun initLocation() {
-        locationRequest = LocationRequest()
-        locationRequest.interval = 10000
-        locationRequest.fastestInterval = 5000
-        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-        locationCallback = object : LocationCallback() {
-            override fun onLocationResult(locationResult: LocationResult?) {
-                if (locationResult == null) {
-                    return
-                }
-                for (location in locationResult.locations) {
-                    location?.run {
-                        wayLatitude = latitude
-                        wayLongitude = longitude
-                        val navController = findNavController(R.id.nav_host_fragment)
-                        val navInflater = navController.navInflater
-                        navController.graph = navInflater.inflate(R.navigation.nav_graph_main)
-                        initNavigationController()
-                        activityMainBinding.drawerLayout.visibility = View.VISIBLE
-                        Timber.e("lat: $wayLatitude  lon: $wayLongitude")
-                        fusedLocationClient.removeLocationUpdates(locationCallback)
-                    }
-                }
-            }
-        }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
+        AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-        fusedLocationClient = LocationServices.getFusedLocationProviderClient(this)
+
         checkPermission()
     }
 
@@ -85,17 +64,12 @@ class MainActivity : MvpAppCompatActivity() {
             if (ActivityCompat.shouldShowRequestPermissionRationale(this, Manifest.permission.ACCESS_FINE_LOCATION)) {
 //                Snackbar.make(fragmentSplashBinding.btn,"shouldShowRequestPermissionRationale", Snackbar.LENGTH_SHORT).show()
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
-                initLocation()
             } else {
                 ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), REQUEST_CODE_LOCATION)
-                initLocation()
             }
         } else {
-            initLocation()
-            Timber.e("aaaaaaa")
-            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location -> Timber.e("lat: ${location?.latitude}  lon: ${location?.longitude}")};
+//            fusedLocationClient.lastLocation.addOnSuccessListener(this) { location -> Timber.e("lat: ${location?.latitude}  lon: ${location?.longitude}")};
             val locationRequest = LocationRequest.create()
-            fusedLocationClient.requestLocationUpdates(locationRequest, locationCallback, Looper.myLooper())
 
         }
     }
@@ -105,7 +79,7 @@ class MainActivity : MvpAppCompatActivity() {
 
         setSupportActionBar(activityMainBinding.toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
-
+        navController.graph = navController.navInflater.inflate(R.navigation.nav_graph_main)
         appBarConfiguration = AppBarConfiguration(
             setOf(R.id.nav_home, R.id.nav_gallery),
             activityMainBinding.drawerLayout
@@ -141,6 +115,7 @@ class MainActivity : MvpAppCompatActivity() {
         Timber.e("ccccccc")
         when (requestCode) {
             REQUEST_CODE_LOCATION -> {
+                mainPresenter.onLocationPermissionGranted()
                 Timber.e("aaaaaaaaa")
                 if (PermissionUtil.isGranted(grantResults)) {
 //                    Snackbar.make(fragmentSplashBinding.btn, "", Snackbar.LENGTH_SHORT).show();
@@ -150,6 +125,17 @@ class MainActivity : MvpAppCompatActivity() {
             }
             else -> super.onRequestPermissionsResult(requestCode, permissions, grantResults)
         }
+    }
+
+    @ProvidePresenter
+    fun providePresenter(): MainPresenter = mainPresenter
+
+    override fun androidInjector(): AndroidInjector<Any> = androidInjector
+
+    override fun showHomeScreen() {
+        initNavigationController()
+        activityMainBinding.drawerLayout.visibility = View.VISIBLE
+        activityMainBinding.flSplash.visibility = View.GONE
     }
 
 }

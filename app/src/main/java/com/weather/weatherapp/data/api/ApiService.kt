@@ -17,5 +17,5 @@ interface ApiService {
     fun weather(@Query("id") id: String, @Query("units") units: String, @Query("lang") lang: String): Single<WeatherData>
 
     @GET("weather")
-    fun weather(@Query("lat") lat: String, @Query("lon") lon: String, @Query("units") units: String, @Query("lang") lang: String): Single<WeatherData>
+    fun weather(@Query("units") units: String, @Query("lang") lang: String, @Query("lat") lat: Double, @Query("lon") lon: Double): Single<WeatherData>
 }

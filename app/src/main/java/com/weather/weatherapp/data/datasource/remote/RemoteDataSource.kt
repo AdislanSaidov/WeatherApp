@@ -13,6 +13,6 @@ class RemoteDataSource(private val apiService: ApiService) {
 
     fun fetchWeatherData(id: String, units: String, lang: String): Single<WeatherData> = apiService.weather(id, units, lang)
 
-    fun fetchWeatherDataByCoords(units: String, lang: String, lat: String, lon: String): Single<WeatherData> = apiService.weather(lat, lon, units, lang)
+    fun fetchWeatherDataByCoords(units: String, lang: String, lat: Double, lon: Double): Single<WeatherData> = apiService.weather(units, lang, lat, lon)
 
 }
