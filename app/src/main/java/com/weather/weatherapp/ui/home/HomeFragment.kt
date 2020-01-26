@@ -1,9 +1,7 @@
 package com.weather.weatherapp.ui.home
 
 import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -31,6 +29,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         val contextThemeWrapper = ContextThemeWrapper(activity, R.style.AppTheme_NoActionBar)
 
         val localInflater = inflater.cloneInContext(contextThemeWrapper)
+        setHasOptionsMenu(true)
 
         binding = FragmentHomeBinding.inflate(localInflater)
         return binding.root
@@ -51,7 +50,10 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     }
 
     override fun showWeatherData(weatherData: UiWeatherData) {
-        (activity as AppCompatActivity).supportActionBar?.title = weatherData.name
+        (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
+        binding.toolbar.title = weatherData.name
+        binding.toolbar.setNavigationIcon(R.drawable.ic_menu)
+//        binding.tvHomeTitle.text = weatherData.name
         binding.tvMainTemp.text = weatherData.temp
         binding.tvMainShortDesc.text = weatherData.weather.description
         binding.tvMainFeelsLikeValue.text = weatherData.feelsLike
@@ -60,7 +62,12 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainWindValue.text = weatherData.wind
         binding.tvMainPressureValue.text = weatherData.pressure
         binding.tvMainVisibilityValue.text = weatherData.visibility
-        Glide.with(requireContext()).load(weatherData.weather.icon).into(binding.ivMainWeatherIcon)
+//        Glide.with(requireContext()).load(weatherData.weather.icon).into(binding.ivMainWeatherIcon)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.home_menu, menu)
+        super.onCreateOptionsMenu(menu, inflater)
     }
 
     @ProvidePresenter

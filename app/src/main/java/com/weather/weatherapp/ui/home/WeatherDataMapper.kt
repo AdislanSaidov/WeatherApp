@@ -1,5 +1,7 @@
 package com.weather.weatherapp.ui.home
 
+import android.text.TextUtils
+import android.text.format.DateUtils
 import com.weather.weatherapp.data.models.*
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.domain.models.UiWeatherData
@@ -12,6 +14,7 @@ import com.weather.weatherapp.utils.Constants.MBAR
 import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
+import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -43,18 +46,21 @@ class WeatherDataMapper(
 
     fun toUiModel(forecastData: ForecastData): List<UiForecast> {
         val forecasts = ArrayList<UiForecast>()
-        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'")
+        val dayFormat = SimpleDateFormat("HH:mm\n", Locale.ROOT)
+        val tomorrowFormat = SimpleDateFormat("HH:mm\nd MMM", Locale(Locale.getDefault().language))
+        val timeZone = TimeZone.getTimeZone("UTC")
+        tomorrowFormat.timeZone = timeZone
+        dayFormat.timeZone = timeZone
         val date = Date()
-        sdf.format(date)
+        val currentTimeMillis = System.currentTimeMillis()
         forecastData.list.forEach { fd ->
             val weather = fd.weather?.get(0) ?: Weather()
             weather.icon = "http://openweathermap.org/img/wn/${weather.icon}@2x.png"
-            weather.description = weather.description.capitalize()
-            date.time = (fd.dt * 1000).toLong()
+            date.time = (fd.dt*1000)
             forecasts.add(
                 UiForecast(
                     temp = convertTemp(fd.main.temp),
-                    dt = sdf.format(date),
+                    dt = if(isTomorrow(date.time, currentTimeMillis, timeZone)) tomorrowFormat.format(date) else dayFormat.format(date),
                     weather = weather
                 )
             )
@@ -62,6 +68,23 @@ class WeatherDataMapper(
 
         return forecasts
     }
+
+
+    private fun isTomorrow(t: Long, currentTimeMillis: Long, timeZone: TimeZone): Boolean {
+        val now = Calendar.getInstance()
+        val forecastDate = Calendar.getInstance()
+        forecastDate.timeInMillis = t
+        now.timeInMillis = currentTimeMillis
+        forecastDate.timeZone = timeZone
+
+        return !(now.get(Calendar.YEAR) == forecastDate.get(Calendar.YEAR) &&
+                now.get(Calendar.MONTH) == forecastDate.get(Calendar.MONTH) &&
+                now.get(Calendar.DATE) == forecastDate.get(Calendar.DATE)) &&
+                forecastDate.get(Calendar.HOUR) == 0 &&
+                forecastDate.get(Calendar.MINUTE) == 0 &&
+                forecastDate.get(Calendar.AM_PM) == Calendar.AM
+    }
+
 
 
     private fun convertPressure(pressure: Int): String {

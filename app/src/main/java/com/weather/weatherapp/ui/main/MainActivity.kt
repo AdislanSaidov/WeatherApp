@@ -5,6 +5,8 @@ import android.content.pm.PackageManager
 import android.content.res.Resources
 import android.os.Bundle
 import android.os.Looper
+import android.util.DisplayMetrics
+import android.view.LayoutInflater
 import android.view.View
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatDelegate
@@ -55,7 +57,9 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
         super.onCreate(savedInstanceState)
         activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(activityMainBinding.root)
-
+        val metrics = resources.displayMetrics
+        val densityDpi = (metrics.density * 160f).toInt()
+        Timber.e("dens: $densityDpi")
         checkPermission()
     }
 
@@ -76,34 +80,14 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
 
     private fun initNavigationController() {
-
-        setSupportActionBar(activityMainBinding.toolbar)
+//        setSupportActionBar(activityMainBinding.toolbar)
         val navController = findNavController(R.id.nav_host_fragment)
         navController.graph = navController.navInflater.inflate(R.navigation.nav_graph_main)
-        appBarConfiguration = AppBarConfiguration(
-            setOf(R.id.nav_home, R.id.nav_gallery),
-            activityMainBinding.drawerLayout
-        )
-        setupActionBarWithNavController(navController, appBarConfiguration)
-        activityMainBinding.navView.setupWithNavController(navController)
-        val toggle = ActionBarDrawerToggle(this, activityMainBinding.drawerLayout, activityMainBinding.toolbar, 0, 0)
-        toggle.syncState()
-        activityMainBinding.navView.setNavigationItemSelectedListener { menuItem ->
-            activityMainBinding.drawerLayout.closeDrawers()
-            menuItem.isChecked = true
-            when (menuItem.itemId) {
-            }
-
-            true
-        }
-    }
-
-    override fun onBackPressed() {
-        if (activityMainBinding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            activityMainBinding.drawerLayout.closeDrawer(GravityCompat.START)
-        } else {
-            return super.onBackPressed()
-        }
+//        appBarConfiguration = AppBarConfiguration(
+//            setOf(R.id.nav_home, R.id.nav_gallery)
+//        )
+//        setupActionBarWithNavController(navController, appBarConfiguration)
+//        activityMainBinding.toolbar.setNavigationIcon(R.drawable.ic_noun_menu_1166840)
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -112,11 +96,9 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        Timber.e("ccccccc")
         when (requestCode) {
             REQUEST_CODE_LOCATION -> {
                 mainPresenter.onLocationPermissionGranted()
-                Timber.e("aaaaaaaaa")
                 if (PermissionUtil.isGranted(grantResults)) {
 //                    Snackbar.make(fragmentSplashBinding.btn, "", Snackbar.LENGTH_SHORT).show();
                 } else {
@@ -134,7 +116,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
     override fun showHomeScreen() {
         initNavigationController()
-        activityMainBinding.drawerLayout.visibility = View.VISIBLE
+        activityMainBinding.clMainLayout.visibility = View.VISIBLE
         activityMainBinding.flSplash.visibility = View.GONE
     }
 
