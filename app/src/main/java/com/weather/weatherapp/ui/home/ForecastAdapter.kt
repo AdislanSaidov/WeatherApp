@@ -5,6 +5,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.weather.weatherapp.R
@@ -42,7 +43,8 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastViewHolder>() {
 
         fun bind(forecast: UiForecast){
             tvTime.text = forecast.dt
-            Glide.with(itemView).load(forecast.weather.icon).into(ivWeather)
+//            Glide.with(itemView).load(forecast.weather.icon).into(ivWeather)
+            ivWeather.setImageDrawable(ContextCompat.getDrawable(itemView.context, forecast.icon))
             tvTemp.text = forecast.temp
         }
     }

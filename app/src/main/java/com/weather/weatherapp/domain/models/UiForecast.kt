@@ -23,6 +23,7 @@ data class UiForecast (
     var name: String? = null,
     var cod: Int? = null,
 
-    var dt: String = ""
+    var dt: String = "",
+    var icon: Int = 0
 
 )

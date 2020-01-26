@@ -1,7 +1,5 @@
 package com.weather.weatherapp.ui.home
 
-import android.text.TextUtils
-import android.text.format.DateUtils
 import com.weather.weatherapp.data.models.*
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.domain.models.UiWeatherData
@@ -14,7 +12,6 @@ import com.weather.weatherapp.utils.Constants.MBAR
 import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
-import timber.log.Timber
 import java.text.SimpleDateFormat
 import java.util.*
 import kotlin.collections.ArrayList
@@ -55,19 +52,21 @@ class WeatherDataMapper(
         val currentTimeMillis = System.currentTimeMillis()
         forecastData.list.forEach { fd ->
             val weather = fd.weather?.get(0) ?: Weather()
-            weather.icon = "http://openweathermap.org/img/wn/${weather.icon}@2x.png"
+
             date.time = (fd.dt*1000)
             forecasts.add(
                 UiForecast(
                     temp = convertTemp(fd.main.temp),
                     dt = if(isTomorrow(date.time, currentTimeMillis, timeZone)) tomorrowFormat.format(date) else dayFormat.format(date),
-                    weather = weather
+                    weather = weather,
+                    icon = resourceManager.getIconId(weather.icon)
                 )
             )
         }
 
         return forecasts
     }
+
 
 
     private fun isTomorrow(t: Long, currentTimeMillis: Long, timeZone: TimeZone): Boolean {

@@ -24,4 +24,12 @@ class ResourceManager(private val context: Context) {
     fun visibilityKm(): String = context.getString(R.string.km)
     fun visibilityMiles(): String = context.getString(R.string.miles)
 
+    fun getIconId(pVariableName: String?): Int {
+        return try {
+            context.resources.getIdentifier("ic_$pVariableName", "drawable", context.packageName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+            R.drawable.ic_menu
+        }
+    }
 }
