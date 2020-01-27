@@ -2,6 +2,7 @@ package com.weather.weatherapp.ui.custom;
 
 import android.content.Context;
 import android.content.res.Resources;
+import android.content.res.TypedArray;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -11,14 +12,22 @@ import android.view.View;
 
 import androidx.annotation.Nullable;
 
+import com.weather.weatherapp.R;
+
 public class SunView extends View {
 
     private Paint paint = new Paint();
     private Paint arcPaint = new Paint();
     private Paint linePaint = new Paint();
-    RectF rectF = new RectF(10*DP, 0, getWidth()-10*DP, 2*getHeight());
-
     private static final float DP = Resources.getSystem().getDisplayMetrics().density;
+    private RectF rectF;
+    private static final int DEFAULT_CIRCLE_MARGIN = (int) (10 * DP);
+    private static final int DEFAULT_CIRCLE_RADIUS = (int) (10 * DP);
+    private float circleMargin = DEFAULT_CIRCLE_MARGIN;
+    private float circleRadius = DEFAULT_CIRCLE_RADIUS;
+
+//    private String
+
 
     public SunView(Context context) {
         super(context);
@@ -26,6 +35,7 @@ public class SunView extends View {
     }
 
     private void init() {
+        rectF = new RectF();
         paint.setColor(Color.YELLOW);
         arcPaint.setColor(Color.YELLOW);
         linePaint.setColor(Color.WHITE);
@@ -35,30 +45,39 @@ public class SunView extends View {
 
 
     public SunView(Context context, @Nullable AttributeSet attrs) {
-        super(context, attrs);
-        init();
+        this(context, attrs, 0);
     }
 
     public SunView(Context context, @Nullable AttributeSet attrs, int defStyleAttr) {
         super(context, attrs, defStyleAttr);
+        TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SunView, defStyleAttr, 0);
+
+        circleMargin = a.getDimensionPixelSize(R.styleable.SunView_circleMargin, DEFAULT_CIRCLE_MARGIN);
+        circleRadius = a.getDimensionPixelSize(R.styleable.SunView_circleRadius, DEFAULT_CIRCLE_RADIUS);
+
+        a.recycle();
         init();
     }
 
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        canvas.drawArc(rectF, 180F, 180F, false, arcPaint);
-        canvas.drawCircle(10*DP,getHeight()-10*DP, 10*DP, paint);
-        canvas.drawCircle(getWidth()-10*DP, getHeight()-10*DP, 10*DP, paint);
+        rectF.left = circleRadius + circleMargin;
+        rectF.top = 0;
+        rectF.right = getWidth() - circleRadius - circleMargin;
+        rectF.bottom = 2 * getHeight();
+        canvas.drawCircle(circleRadius + circleMargin, getHeight() - circleRadius, circleRadius, paint);
+        canvas.drawCircle(getWidth() - circleRadius - circleMargin, getHeight() - circleRadius, circleRadius, paint);
 
-        canvas.drawLine(0, getHeight()-10*DP, getWidth(), getHeight()-10*DP, linePaint);
+        canvas.drawLine(0, getHeight() - circleRadius, getWidth(), getHeight() - circleRadius, linePaint);
+        canvas.drawArc(rectF, 180F, 180F, false, arcPaint);
     }
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
 
         int desiredWidth = (int) (getPaddingLeft() + getPaddingRight());
-        int desiredHeight = (int) (getPaddingTop() + getPaddingBottom()+100*DP);
+        int desiredHeight = (int) (getPaddingTop() + getPaddingBottom() + 100 * DP);
 
         int widthMode = MeasureSpec.getMode(widthMeasureSpec);
         int widthSize = MeasureSpec.getSize(widthMeasureSpec);
@@ -87,4 +106,19 @@ public class SunView extends View {
         setMeasuredDimension(width, height);
     }
 
+    public float getCircleMargin() {
+        return circleMargin;
+    }
+
+    public void setCircleMargin(float circleMargin) {
+        this.circleMargin = circleMargin;
+    }
+
+    public float getCircleRadius() {
+        return circleRadius;
+    }
+
+    public void setCircleRadius(float circleRadius) {
+        this.circleRadius = circleRadius;
+    }
 }

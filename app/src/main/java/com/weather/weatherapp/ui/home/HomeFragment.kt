@@ -62,6 +62,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainWindValue.text = weatherData.wind
         binding.tvMainPressureValue.text = weatherData.pressure
         binding.tvMainVisibilityValue.text = weatherData.visibility
+        binding.sunViewHomeSunLife.
 //        Glide.with(requireContext()).load(weatherData.weather.icon).into(binding.ivMainWeatherIcon)
     }
 
