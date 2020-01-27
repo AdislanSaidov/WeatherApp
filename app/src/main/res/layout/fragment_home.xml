@@ -180,7 +180,12 @@
         tools:itemCount="5"
         tools:orientation="horizontal"
         tools:listitem="@layout/view_forecast_item"/>
-
+    <com.weather.weatherapp.ui.custom.SunView
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintEnd_toEndOf="@id/guid_end"
+        app:layout_constraintStart_toStartOf="@id/guid_start"
+        app:layout_constraintTop_toBottomOf="@id/rv_main_forecast"/>
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/guid_start"
         android:layout_width="wrap_content"
