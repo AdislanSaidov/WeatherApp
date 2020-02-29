@@ -42,7 +42,6 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastViewHolder>() {
 
         fun bind(forecast: UiForecast){
             tvTime.text = forecast.dt
-//            Glide.with(itemView).load(forecast.weather.icon).into(ivWeather)
             ivWeather.setImageDrawable(ContextCompat.getDrawable(itemView.context, forecast.icon))
             tvTemp.text = forecast.temp
         }
