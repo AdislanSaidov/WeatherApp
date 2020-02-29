@@ -2,26 +2,14 @@ package com.weather.weatherapp.ui.main
 
 import android.Manifest
 import android.content.pm.PackageManager
-import android.content.res.Resources
 import android.os.Bundle
-import android.os.Looper
-import android.util.DisplayMetrics
-import android.view.LayoutInflater
 import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
-import androidx.appcompat.app.AppCompatDelegate
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
-import androidx.core.view.GravityCompat
-import androidx.navigation.NavGraph
-import androidx.navigation.NavOptions
 import androidx.navigation.findNavController
-import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
 import androidx.navigation.ui.navigateUp
-import androidx.navigation.ui.setupActionBarWithNavController
-import androidx.navigation.ui.setupWithNavController
-import com.google.android.gms.location.*
+import com.google.android.gms.location.LocationRequest
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.ActivityMainBinding
 import com.weather.weatherapp.utils.PermissionUtil

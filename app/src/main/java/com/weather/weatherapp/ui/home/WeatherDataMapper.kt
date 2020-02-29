@@ -121,10 +121,10 @@ class WeatherDataMapper(
             MILES -> "${metricsConverter.toMiles(KiloMeters(wind.speed))} ${resourceManager.speedMilesPerHour()}"
             METERS -> "${metricsConverter.toMetersPerSecond(KiloMeters(wind.speed))} ${resourceManager.speedMetersPerSecond()}"
             else -> ""
-        } + " ${toTextualDescription(wind.deg)}"
+        } + " ${toWeatherDirectionName(wind.deg)}"
     }
 
-    private fun toTextualDescription(degree: Int): String {
+    private fun toWeatherDirectionName(degree: Int): String {
         if (degree > 337.5) return resourceManager.northerly()
         if (degree > 292.5) return resourceManager.northWesterly()
         if (degree > 247.5) return resourceManager.westerly()

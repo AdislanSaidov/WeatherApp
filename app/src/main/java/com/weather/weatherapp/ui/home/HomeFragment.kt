@@ -53,7 +53,6 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         (activity as AppCompatActivity).setSupportActionBar(binding.toolbar)
         binding.toolbar.title = weatherData.name
         binding.toolbar.setNavigationIcon(R.drawable.ic_menu)
-//        binding.tvHomeTitle.text = weatherData.name
         binding.tvMainTemp.text = weatherData.temp
         binding.tvMainShortDesc.text = weatherData.weather.description
         binding.tvMainFeelsLikeValue.text = weatherData.feelsLike
@@ -62,8 +61,6 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainWindValue.text = weatherData.wind
         binding.tvMainPressureValue.text = weatherData.pressure
         binding.tvMainVisibilityValue.text = weatherData.visibility
-        binding.sunViewHomeSunLife.
-//        Glide.with(requireContext()).load(weatherData.weather.icon).into(binding.ivMainWeatherIcon)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

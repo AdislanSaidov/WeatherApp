@@ -7,14 +7,13 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
 import com.weather.weatherapp.R
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.ui.home.ForecastAdapter.ForecastViewHolder
 import java.util.*
 
 class ForecastAdapter : RecyclerView.Adapter<ForecastViewHolder>() {
-    private val forecasts: MutableList<UiForecast> = ArrayList()
+    private val forecasts = ArrayList<UiForecast>()
 
     fun setData(promotions: List<UiForecast>) {
         forecasts.clear()
