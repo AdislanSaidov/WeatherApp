@@ -1,7 +1,6 @@
 package com.weather.weatherapp.data.datasource.remote
 
 import com.weather.weatherapp.data.api.ApiService
-import com.weather.weatherapp.data.models.Forecast
 import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
 import io.reactivex.Single

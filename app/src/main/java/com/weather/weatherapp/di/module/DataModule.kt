@@ -2,10 +2,8 @@ package com.weather.weatherapp.di.module
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.google.android.gms.location.FusedLocationProviderClient
 import com.weather.weatherapp.data.api.ApiService
 import com.weather.weatherapp.data.api.TokenInterceptor
-import com.weather.weatherapp.data.datasource.LocationProvider
 import com.weather.weatherapp.data.datasource.Repository
 import com.weather.weatherapp.data.datasource.local.PrefsManager
 import com.weather.weatherapp.data.datasource.remote.RemoteDataSource

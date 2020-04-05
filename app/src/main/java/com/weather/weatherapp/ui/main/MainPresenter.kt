@@ -6,20 +6,11 @@ import com.weather.weatherapp.ui.base.BasePresenter
 import moxy.InjectViewState
 
 @InjectViewState
-class MainPresenter(private val repository: MainRepository): BasePresenter<MainMvpView>(), OnLocationListener {
+class MainPresenter(private val repository: MainRepository) : BasePresenter<MainMvpView>() {
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-        repository.setOnLocationListener(this)
-        repository.requestCurrentCoordinates()
-    }
 
-    fun onLocationPermissionGranted(){
-
-    }
-
-    override fun onLocationKnown(coord: Coord) {
-
+    fun onLocationKnown(lat: Double, lon: Double) {
+        repository.storeLocation(coord = Coord(lat = lat, lon = lon))
         viewState.showHomeScreen()
     }
 

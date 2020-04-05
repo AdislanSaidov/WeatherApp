@@ -11,7 +11,6 @@ import com.weather.weatherapp.utils.Constants.VISIBILITY_METRIC_DEFAULT_VALUE
 import com.weather.weatherapp.utils.Constants.VISIBILITY_METRIC_KEY
 import com.weather.weatherapp.utils.Constants.WIND_METRIC_DEFAULT_VALUE
 import com.weather.weatherapp.utils.Constants.WIND_METRIC_KEY
-import timber.log.Timber
 import java.util.*
 
 class PrefsManager(

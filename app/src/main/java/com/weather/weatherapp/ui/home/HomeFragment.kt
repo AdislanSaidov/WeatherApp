@@ -5,7 +5,6 @@ import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.bumptech.glide.Glide
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentHomeBinding
 import com.weather.weatherapp.domain.models.UiForecast

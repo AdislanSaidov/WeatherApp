@@ -42,6 +42,12 @@ android {
     viewBinding{
         enabled = true
     }
+    lintOptions {
+        disable 'ContentDescription'
+        disable 'Autofill'
+        disable 'RtlSymmetry'
+        disable 'MissingPermission'
+    }
 
 }
 

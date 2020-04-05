@@ -6,7 +6,6 @@ import com.weather.weatherapp.data.models.Config
 import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
 import io.reactivex.Single
-import retrofit2.Response
 
 class Repository(
     private val remoteDataSource: RemoteDataSource,

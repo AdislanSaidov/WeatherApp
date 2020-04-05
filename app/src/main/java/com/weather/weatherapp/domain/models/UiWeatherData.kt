@@ -1,6 +1,9 @@
 package com.weather.weatherapp.domain.models
 
-import com.weather.weatherapp.data.models.*
+import com.weather.weatherapp.data.models.Clouds
+import com.weather.weatherapp.data.models.Coord
+import com.weather.weatherapp.data.models.Sys
+import com.weather.weatherapp.data.models.Weather
 
 data class UiWeatherData (
 

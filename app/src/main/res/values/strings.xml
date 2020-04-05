@@ -23,4 +23,7 @@
     <string name="humidity">Humidity:</string>
     <string name="km" >km</string>
     <string name="miles" >mi</string>
+    <string name="settings">Настройки</string>
+    <string name="quit">Выйти</string>
+    <string name="enable_location_settings">Пожалуйста, включите настройки местоположения</string>
 </resources>
