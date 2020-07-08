@@ -60,6 +60,8 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainWindValue.text = weatherData.wind
         binding.tvMainPressureValue.text = weatherData.pressure
         binding.tvMainVisibilityValue.text = weatherData.visibility
+        binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
+        binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

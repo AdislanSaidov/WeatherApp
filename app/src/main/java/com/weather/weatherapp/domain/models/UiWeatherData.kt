@@ -22,6 +22,7 @@ data class UiWeatherData (
     var timezone: Int? = null,
     var id: Int? = null,
     var name: String? = null,
-    var cod: Int? = null
-
+    var cod: Int? = null,
+    var sunRise: String = "",
+    var sunSet: String = ""
 )

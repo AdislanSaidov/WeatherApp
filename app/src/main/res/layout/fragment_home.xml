@@ -184,8 +184,9 @@
         android:id="@+id/sun_view_home_sun_life"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        app:circleMargin="20dp"
-        app:circleRadius="5dp"
+        android:layout_marginTop="8dp"
+        app:arcMargin="40dp"
+        app:pointRadius="5dp"
         app:layout_constraintEnd_toEndOf="@id/guid_end"
         app:layout_constraintStart_toStartOf="@id/guid_start"
         app:layout_constraintTop_toBottomOf="@id/rv_main_forecast"/>

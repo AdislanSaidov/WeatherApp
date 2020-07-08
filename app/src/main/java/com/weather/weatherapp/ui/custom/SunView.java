@@ -3,6 +3,8 @@ package com.weather.weatherapp.ui.custom;
 import android.content.Context;
 import android.content.res.Resources;
 import android.content.res.TypedArray;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
@@ -16,17 +18,22 @@ import com.weather.weatherapp.R;
 
 public class SunView extends View {
 
-    private Paint paint = new Paint();
-    private Paint arcPaint = new Paint();
-    private Paint linePaint = new Paint();
+    private final Paint paint = new Paint();
+    private final Paint arcPaint = new Paint();
+    private final Paint linePaint = new Paint();
+    private final Paint textPaint = new Paint();
     private static final float DP = Resources.getSystem().getDisplayMetrics().density;
     private RectF rectF;
-    private static final int DEFAULT_CIRCLE_MARGIN = (int) (10 * DP);
-    private static final int DEFAULT_CIRCLE_RADIUS = (int) (10 * DP);
-    private float circleMargin = DEFAULT_CIRCLE_MARGIN;
-    private float circleRadius = DEFAULT_CIRCLE_RADIUS;
+    private static final int DEFAULT_ARC_MARGIN = (int) (10 * DP);
+    private static final int DEFAULT_ARC_RADIUS = (int) (10 * DP);
+    private float arcHorizontalMargin = DEFAULT_ARC_MARGIN;
+    private float pointRadius = DEFAULT_ARC_RADIUS;
+    private String sunRise = "";
+    private String sunSet = "";
+    private static final int TEXT_BOTTOM_MARGIN = (int) (10 * DP);
+    private static final int TEXT_SIZE = (int) (14 * DP);
+    private Bitmap sunBitmap;
 
-//    private String
 
 
     public SunView(Context context) {
@@ -37,10 +44,17 @@ public class SunView extends View {
     private void init() {
         rectF = new RectF();
         paint.setColor(Color.YELLOW);
+        textPaint.setColor(Color.WHITE);
+        textPaint.setTextSize(TEXT_SIZE);
+
         arcPaint.setColor(Color.YELLOW);
+        arcPaint.setStrokeWidth(2*DP);
+        arcPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         linePaint.setColor(Color.WHITE);
         arcPaint.setStyle(Paint.Style.STROKE);
         linePaint.setStyle(Paint.Style.STROKE);
+
+        sunBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sun);
     }
 
 
@@ -52,8 +66,8 @@ public class SunView extends View {
         super(context, attrs, defStyleAttr);
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SunView, defStyleAttr, 0);
 
-        circleMargin = a.getDimensionPixelSize(R.styleable.SunView_circleMargin, DEFAULT_CIRCLE_MARGIN);
-        circleRadius = a.getDimensionPixelSize(R.styleable.SunView_circleRadius, DEFAULT_CIRCLE_RADIUS);
+        arcHorizontalMargin = a.getDimensionPixelSize(R.styleable.SunView_arcMargin, DEFAULT_ARC_MARGIN);
+        pointRadius = a.getDimensionPixelSize(R.styleable.SunView_pointRadius, DEFAULT_ARC_RADIUS);
 
         a.recycle();
         init();
@@ -62,15 +76,24 @@ public class SunView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        rectF.left = circleRadius + circleMargin;
-        rectF.top = 0;
-        rectF.right = getWidth() - circleRadius - circleMargin;
+        rectF.left = pointRadius + arcHorizontalMargin;
+        rectF.top = 2*DP;
+        rectF.right = getWidth() - pointRadius - arcHorizontalMargin;
         rectF.bottom = 2 * getHeight();
-        canvas.drawCircle(circleRadius + circleMargin, getHeight() - circleRadius, circleRadius, paint);
-        canvas.drawCircle(getWidth() - circleRadius - circleMargin, getHeight() - circleRadius, circleRadius, paint);
 
-        canvas.drawLine(0, getHeight() - circleRadius, getWidth(), getHeight() - circleRadius, linePaint);
+        canvas.drawCircle(pointRadius + arcHorizontalMargin, getHeight() - pointRadius, pointRadius, paint);
+        canvas.drawCircle(getWidth() - pointRadius - arcHorizontalMargin, getHeight() - pointRadius, pointRadius, paint);
+
         canvas.drawArc(rectF, 180F, 180F, false, arcPaint);
+
+        canvas.drawLine(0, getHeight() - pointRadius, getWidth(), getHeight() - pointRadius, linePaint);
+
+        canvas.drawText(sunRise, 0, getHeight() - TEXT_BOTTOM_MARGIN, textPaint);
+        canvas.drawText(sunSet, getWidth() - textPaint.measureText(sunSet), getHeight() - TEXT_BOTTOM_MARGIN, textPaint);
+
+        canvas.drawBitmap(sunBitmap, 0, 0, paint);
+
+
     }
 
     @Override
@@ -106,19 +129,37 @@ public class SunView extends View {
         setMeasuredDimension(width, height);
     }
 
-    public float getCircleMargin() {
-        return circleMargin;
+    public String getSunRise() {
+        return sunRise;
     }
 
-    public void setCircleMargin(float circleMargin) {
-        this.circleMargin = circleMargin;
+    public void setSunRise(String sunRise) {
+        this.sunRise = sunRise;
+        invalidate();
     }
 
-    public float getCircleRadius() {
-        return circleRadius;
+    public String getSunSet() {
+        return sunSet;
     }
 
-    public void setCircleRadius(float circleRadius) {
-        this.circleRadius = circleRadius;
+    public void setSunSet(String sunSet) {
+        this.sunSet = sunSet;
+        invalidate();
+    }
+
+    public float getArcHorizontalMargin() {
+        return arcHorizontalMargin;
+    }
+
+    public void setArcHorizontalMargin(float arcHorizontalMargin) {
+        this.arcHorizontalMargin = arcHorizontalMargin;
+    }
+
+    public float getPointRadius() {
+        return pointRadius;
+    }
+
+    public void setPointRadius(float pointRadius) {
+        this.pointRadius = pointRadius;
     }
 }

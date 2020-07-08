@@ -18,9 +18,9 @@ import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
 class WeatherDataMapper(
-    private val resourceManager: ResourceManager,
-    private val metricsConverter: MetricsConverter,
-    private val config: Config
+        private val resourceManager: ResourceManager,
+        private val metricsConverter: MetricsConverter,
+        private val config: Config
 ) {
 
     fun toUiModel(weatherData: WeatherData): UiWeatherData {
@@ -28,16 +28,18 @@ class WeatherDataMapper(
         val weather = weatherData.weather?.get(0) ?: Weather()
         weather.icon = "http://openweathermap.org/img/wn/${weather.icon}@2x.png"
         weather.description = weather.description.capitalize()
-
+        val sdf = SimpleDateFormat("HH:mm", Locale.ROOT)
         return UiWeatherData(
-            temp = convertTemp(weatherData.main.temp),
-            feelsLike = convertTemp(weatherData.main.feelsLike),
-            weather = weather,
-            wind = convertWind(weatherData.wind),
-            pressure = convertPressure(weatherData.main.pressure),
-            visibility = convertVisibility(weatherData.visibility),
-            name = weatherData.name,
-            humidity = "${weatherData.main.humidity} %"
+                temp = convertTemp(weatherData.main.temp),
+                feelsLike = convertTemp(weatherData.main.feelsLike),
+                weather = weather,
+                wind = convertWind(weatherData.wind),
+                pressure = convertPressure(weatherData.main.pressure),
+                visibility = convertVisibility(weatherData.visibility),
+                name = weatherData.name,
+                humidity = "${weatherData.main.humidity} %",
+                sunRise = sdf.format(Date((weatherData.sys?.sunRise ?: 0) * 1000)),
+                sunSet = sdf.format(Date((weatherData.sys?.sunSet ?: 0) * 1000))
         )
     }
 
@@ -53,20 +55,19 @@ class WeatherDataMapper(
         forecastData.list.forEach { fd ->
             val weather = fd.weather?.get(0) ?: Weather()
 
-            date.time = (fd.dt*1000)
+            date.time = (fd.dt * 1000)
             forecasts.add(
-                UiForecast(
-                    temp = convertTemp(fd.main.temp),
-                    dt = if(isTomorrow(date.time, currentTimeMillis, timeZone)) tomorrowFormat.format(date) else dayFormat.format(date),
-                    weather = weather,
-                    icon = resourceManager.getIconId(weather.icon)
-                )
+                    UiForecast(
+                            temp = convertTemp(fd.main.temp),
+                            dt = if (isTomorrow(date.time, currentTimeMillis, timeZone)) tomorrowFormat.format(date) else dayFormat.format(date),
+                            weather = weather,
+                            icon = resourceManager.getIconId(weather.icon)
+                    )
             )
         }
 
         return forecasts
     }
-
 
 
     private fun isTomorrow(t: Long, currentTimeMillis: Long, timeZone: TimeZone): Boolean {
@@ -83,7 +84,6 @@ class WeatherDataMapper(
                 forecastDate.get(Calendar.MINUTE) == 0 &&
                 forecastDate.get(Calendar.AM_PM) == Calendar.AM
     }
-
 
 
     private fun convertPressure(pressure: Int): String {

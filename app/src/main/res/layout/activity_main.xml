@@ -16,7 +16,7 @@
             android:layout_height="match_parent"
             android:layout_gravity="top"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/clear_sky_night" />
+            app:srcCompat="@drawable/clear_sky_day" />
 
 
         <androidx.core.widget.NestedScrollView
