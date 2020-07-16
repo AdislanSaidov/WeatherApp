@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:tools="http://schemas.android.com/tools"
     android:fitsSystemWindows="true">
 
     <androidx.coordinatorlayout.widget.CoordinatorLayout
@@ -15,9 +16,14 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_gravity="top"
+            android:background="#1F6BBC"
+            android:scaleType="fitXY"/>
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_gravity="top"
             android:scaleType="fitXY"
-            app:srcCompat="@drawable/clear_sky_day" />
-
+            app:srcCompat="@drawable/bg_sun" />
 
         <androidx.core.widget.NestedScrollView
             android:layout_width="match_parent"
@@ -36,6 +42,7 @@
 
     <FrameLayout
         android:id="@+id/fl_splash"
+        tools:visibility="gone"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 

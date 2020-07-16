@@ -24,5 +24,8 @@ data class UiWeatherData (
     var name: String? = null,
     var cod: Int? = null,
     var sunRise: String = "",
-    var sunSet: String = ""
+    var sunSet: String = "",
+    var sunHours: Int = 0,
+    var currentHour: Int = 0,
+    var sunRiseHour: Int = 0
 )

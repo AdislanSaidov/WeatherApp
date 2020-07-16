@@ -29,7 +29,6 @@ class HomeFragment : BaseFragment(), HomeMvpView{
 
         val localInflater = inflater.cloneInContext(contextThemeWrapper)
         setHasOptionsMenu(true)
-
         binding = FragmentHomeBinding.inflate(localInflater)
         return binding.root
     }
@@ -62,6 +61,10 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainVisibilityValue.text = weatherData.visibility
         binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
         binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
+        binding.sunViewHomeSunLife.setHours(weatherData.sunHours)
+        binding.sunViewHomeSunLife.setCurrentHour(weatherData.currentHour)
+        binding.sunViewHomeSunLife.startAnim()
+        binding.sunViewHomeSunLife.setSunRiseHour(weatherData.sunRiseHour)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

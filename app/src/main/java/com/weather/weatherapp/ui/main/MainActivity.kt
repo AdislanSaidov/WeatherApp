@@ -6,6 +6,7 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
+import android.util.DisplayMetrics
 import android.view.View
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
@@ -24,6 +25,7 @@ import dagger.android.HasAndroidInjector
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
+import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -50,7 +52,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-
+        val metrics: DisplayMetrics = resources.displayMetrics
+        Timber.e(metrics.densityDpi.toString())
         locationListener = LocationListener(this, lifecycle){
             mainPresenter.onLocationKnown(lat = it.latitude, lon = it.longitude)
         }

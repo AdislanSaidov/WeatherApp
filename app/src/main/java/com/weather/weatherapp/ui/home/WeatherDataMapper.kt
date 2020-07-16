@@ -13,7 +13,10 @@ import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
 import java.text.SimpleDateFormat
+import java.time.Instant
+import java.time.LocalDateTime
 import java.util.*
+import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -29,6 +32,10 @@ class WeatherDataMapper(
         weather.icon = "http://openweathermap.org/img/wn/${weather.icon}@2x.png"
         weather.description = weather.description.capitalize()
         val sdf = SimpleDateFormat("HH:mm", Locale.ROOT)
+        val sunRiseDate = Date((weatherData.sys?.sunRise ?: 0) * 1000)
+        val sunSetDate = Date((weatherData.sys?.sunSet ?: 0) * 1000)
+        val calendar = GregorianCalendar.getInstance()
+        calendar.time = sunRiseDate
         return UiWeatherData(
                 temp = convertTemp(weatherData.main.temp),
                 feelsLike = convertTemp(weatherData.main.feelsLike),
@@ -38,8 +45,11 @@ class WeatherDataMapper(
                 visibility = convertVisibility(weatherData.visibility),
                 name = weatherData.name,
                 humidity = "${weatherData.main.humidity} %",
-                sunRise = sdf.format(Date((weatherData.sys?.sunRise ?: 0) * 1000)),
-                sunSet = sdf.format(Date((weatherData.sys?.sunSet ?: 0) * 1000))
+                sunRise = sdf.format(sunRiseDate),
+                sunSet = sdf.format(sunSetDate),
+                sunHours = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60 * 60)).toInt(),
+                currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
+                sunRiseHour = calendar.get(Calendar.HOUR_OF_DAY)
         )
     }
 
