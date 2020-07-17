@@ -61,10 +61,8 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainVisibilityValue.text = weatherData.visibility
         binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
         binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
-        binding.sunViewHomeSunLife.setHours(weatherData.sunHours)
-        binding.sunViewHomeSunLife.setCurrentHour(weatherData.currentHour)
+        binding.sunViewHomeSunLife.init(weatherData.sunHours, weatherData.currentHour, weatherData.sunRiseHour)
         binding.sunViewHomeSunLife.startAnim()
-        binding.sunViewHomeSunLife.setSunRiseHour(weatherData.sunRiseHour)
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

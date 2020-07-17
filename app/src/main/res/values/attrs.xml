@@ -2,6 +2,5 @@
 <resources>
     <declare-styleable name="SunView">
         <attr name="arcMargin" format="dimension" />
-        <attr name="pointRadius" format="dimension" />
     </declare-styleable>
 </resources>

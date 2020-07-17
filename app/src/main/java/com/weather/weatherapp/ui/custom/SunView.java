@@ -19,6 +19,8 @@ import androidx.annotation.Nullable;
 
 import com.weather.weatherapp.R;
 
+import org.jetbrains.annotations.NotNull;
+
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Map;
@@ -27,16 +29,13 @@ import timber.log.Timber;
 
 public class SunView extends View {
 
-    private final Paint paint = new Paint();
-    private final Paint arcPaint = new Paint();
-    private final Paint linePaint = new Paint();
-    private final Paint textPaint = new Paint();
+    private final Paint paint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint arcPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint linePaint = new Paint(Paint.ANTI_ALIAS_FLAG);
+    private final Paint textPaint = new Paint(Paint.ANTI_ALIAS_FLAG);
     private static final float DP = Resources.getSystem().getDisplayMetrics().density;
-    private RectF rectF;
     private static final int DEFAULT_ARC_MARGIN = (int) (10 * DP);
-    private static final int DEFAULT_ARC_RADIUS = (int) (10 * DP);
     private float arcHorizontalMargin = DEFAULT_ARC_MARGIN;
-    private float pointRadius = DEFAULT_ARC_RADIUS;
     private String sunRise = "";
     private String sunSet = "";
     private static final int TEXT_BOTTOM_MARGIN = (int) (10 * DP);
@@ -46,8 +45,6 @@ public class SunView extends View {
     private PointF[] arcPoints;
     private PathMeasure pm;
     private final float[] xyCoordinate = new float[2];
-    private final PointF startPoint = new PointF();
-    private final PointF endPoint = new PointF();
 
     private static final int SUN_RADIUS = (int) (8 * DP);
 
@@ -55,7 +52,7 @@ public class SunView extends View {
     private int pointsCount;
     private int hours;
     private int currentHour;
-    private Map<Integer, PointF> indexedPoints = new HashMap<>();
+    private final Map<Integer, PointF> indexedPoints = new HashMap<>();
     private int sunRiseHour;
 
     public SunView(Context context) {
@@ -64,14 +61,12 @@ public class SunView extends View {
     }
 
     private void init() {
-        rectF = new RectF();
         paint.setColor(Color.YELLOW);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(TEXT_SIZE);
 
         arcPaint.setColor(Color.YELLOW);
         arcPaint.setStrokeWidth(2*DP);
-        arcPaint.setFlags(Paint.ANTI_ALIAS_FLAG);
         linePaint.setColor(Color.WHITE);
         linePaint.setStrokeWidth(2*DP);
         arcPaint.setStyle(Paint.Style.STROKE);
@@ -95,7 +90,6 @@ public class SunView extends View {
         TypedArray a = context.obtainStyledAttributes(attrs, R.styleable.SunView, defStyleAttr, 0);
 
         arcHorizontalMargin = a.getDimensionPixelSize(R.styleable.SunView_arcMargin, DEFAULT_ARC_MARGIN);
-        pointRadius = a.getDimensionPixelSize(R.styleable.SunView_pointRadius, DEFAULT_ARC_RADIUS);
 
         a.recycle();
         init();
@@ -109,36 +103,36 @@ public class SunView extends View {
         int canvasWidth = getWidth();
         int canvasHeight = getHeight();
 
-        rectF.left = pointRadius + arcHorizontalMargin;
-        rectF.top = 2*DP;
-
-
-        rectF.right = canvasWidth - pointRadius - arcHorizontalMargin;
-        rectF.bottom = 2 * canvasHeight;
-        Timber.e(rectF.toString());
-
-        startPoint.x = arcHorizontalMargin;
-        startPoint.y = canvasHeight * 2;
-
-        endPoint.x = canvasWidth - arcHorizontalMargin;
-        endPoint.y = canvasHeight * 2;
-
         canvas.drawLine(0, canvasHeight, canvasWidth, canvasHeight, linePaint);
 
-        canvas.drawText(sunRise, 0, canvasHeight - TEXT_BOTTOM_MARGIN, textPaint);
-        canvas.drawText(sunSet, canvasWidth - textPaint.measureText(sunSet), canvasHeight - TEXT_BOTTOM_MARGIN, textPaint);
+        int textY = canvasHeight - TEXT_BOTTOM_MARGIN;
+        canvas.drawText(sunRise, 0, textY, textPaint);
+        canvas.drawText(sunSet, canvasWidth - textPaint.measureText(sunSet), textY, textPaint);
 
+        canvas.drawPath(path, arcPaint);
+        drawLights(canvas);
 
-        oval.left = startPoint.x;
+        if(currentHour < sunRiseHour + hours) {
+            drawSun(canvas);
+        }
+
+//        for(PointF p: arcPoints){
+//            canvas.drawCircle(p.x, p.y, SUN_RADIUS, paint);
+//        }
+    }
+
+    private void initSunPath() {
+        int canvasWidth = getWidth();
+        int canvasHeight = getHeight();
+
+        oval.left = arcHorizontalMargin;
         oval.top = 5*DP;
-        oval.right = endPoint.x;
-        oval.bottom = endPoint.y;
+        oval.right = canvasWidth - arcHorizontalMargin;
+        oval.bottom = canvasHeight * 2;
+
         path.addArc(oval, 180, 180);
 
         Timber.e(oval.toString());
-        canvas.drawPath(path, arcPaint);
-
-
 
         pm.setPath(path, false);
         float pathLength = pm.getLength();
@@ -150,24 +144,25 @@ public class SunView extends View {
         }
         createIndexedPoints();
         Timber.e(Arrays.toString(arcPoints));
+    }
 
-        canvas.drawCircle(arcPoints[0].x, arcPoints[0].y, SUN_RADIUS, paint);
-        canvas.drawCircle(arcPoints[arcPoints.length-1].x, arcPoints[arcPoints.length-1].y, SUN_RADIUS, paint);
-
-        if(currentHour >= sunRiseHour + hours)
-            return;
-
+    private void drawSun(@NotNull Canvas canvas) {
         int bitmapCenterHeight = sunBitmap.getHeight() / 2;
         int bitmapCenterWidth = sunBitmap.getWidth() / 2;
         PointF currentHourPoint = indexedPoints.get(currentHour);
         canvas.drawBitmap(sunBitmap, currentHourPoint.x-bitmapCenterWidth, currentHourPoint.y-bitmapCenterHeight, paint);
-
-//        for(PointF p: arcPoints){
-//            canvas.drawCircle(p.x, p.y, SUN_RADIUS, paint);
-//        }
     }
 
-    public void setHours(int hours){
+    private void drawLights(Canvas canvas) {
+        if(arcPoints == null || arcPoints.length == 0) return;
+        canvas.drawCircle(arcPoints[0].x, arcPoints[0].y, SUN_RADIUS, paint);
+        canvas.drawCircle(arcPoints[arcPoints.length-1].x, arcPoints[arcPoints.length-1].y, SUN_RADIUS, paint);
+    }
+
+    public void init(int hours, int currentHour, int sunRiseHour){
+        this.currentHour = currentHour;
+        this.sunRiseHour = sunRiseHour;
+        Timber.e("current hour: "+currentHour);
 
         pointsCount = hours + 2;
         this.hours = hours;
@@ -176,6 +171,7 @@ public class SunView extends View {
         for (int i = 0; i < pointsCount; ++i){
             arcPoints[i] = new PointF();
         }
+        initSunPath();
 
         invalidate();
 
@@ -185,22 +181,14 @@ public class SunView extends View {
     private void createIndexedPoints(){
         for (int i = sunRiseHour, j = 0; i < sunRiseHour + hours; ++i, ++j){
             indexedPoints.put(i, arcPoints[j]);
-        }   
+        }
     }
 
-    public void setCurrentHour(int currentHour){
-        this.currentHour = currentHour;
-        Timber.e("current hour: "+currentHour);
-
-    }
-
-    public void setSunRiseHour(int sunRiseHour) {
-        this.sunRiseHour = sunRiseHour;
-    }
 
     public void startAnim() {
 
     }
+
 
     @Override
     protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
@@ -261,13 +249,6 @@ public class SunView extends View {
         this.arcHorizontalMargin = arcHorizontalMargin;
     }
 
-    public float getPointRadius() {
-        return pointRadius;
-    }
-
-    public void setPointRadius(float pointRadius) {
-        this.pointRadius = pointRadius;
-    }
 
 
 
