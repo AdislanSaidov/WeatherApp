@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.*
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentHomeBinding
@@ -68,6 +69,18 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         inflater.inflate(R.menu.home_menu, menu)
         super.onCreateOptionsMenu(menu, inflater)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.menu_settings -> {
+                findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
+            }
+            else -> {
+
+            }
+        }
+        return true
     }
 
     @ProvidePresenter
