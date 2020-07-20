@@ -49,7 +49,9 @@ class WeatherDataMapper(
                 sunSet = sdf.format(sunSetDate),
                 sunHours = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60 * 60)).toInt(),
                 currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                sunRiseHour = calendar.get(Calendar.HOUR_OF_DAY)
+                sunRiseHour = calendar.get(Calendar.HOUR_OF_DAY),
+                min = Calendar.getInstance().get(Calendar.MINUTE),
+                currentMin = sunSetDate.time.toInt()
         )
     }
 
