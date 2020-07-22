@@ -51,7 +51,8 @@ class WeatherDataMapper(
                 currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
                 sunRiseHour = calendar.get(Calendar.HOUR_OF_DAY),
                 min = Calendar.getInstance().get(Calendar.MINUTE),
-                currentMin = sunSetDate.time.toInt()
+                currentMin = ((System.currentTimeMillis() - sunRiseDate.time) / (1000 * 60)).toInt(),
+                minBetween = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60)).toInt()
         )
     }
 

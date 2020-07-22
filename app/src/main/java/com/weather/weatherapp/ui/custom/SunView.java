@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.graphics.Paint;
 import android.graphics.Path;
 import android.graphics.PathMeasure;
+import android.graphics.PointF;
 import android.graphics.RectF;
 import android.os.Parcel;
 import android.os.Parcelable;
@@ -23,9 +24,6 @@ import androidx.annotation.Nullable;
 import com.weather.weatherapp.R;
 
 import org.jetbrains.annotations.NotNull;
-
-import java.util.HashMap;
-import java.util.Map;
 
 import timber.log.Timber;
 
@@ -50,15 +48,14 @@ public class SunView extends View {
 
 
     private final RectF oval = new RectF();
-    private int pointsCount;
-    private int hours;
-    private int currentHour;
+    private int minBetween;
     private int currentTimePoint;
-    private final Map<Integer, Integer> indexedPoints = new HashMap<>();
-    private int sunRiseHour;
-    private int min;
     private float[][] points;
-    private final float[][] boundPoints = new float[2][2];
+
+    private final PointF startPoint = new PointF();
+    private final PointF endPoint = new PointF();
+    private int currentMin;
+
 
     public SunView(Context context) {
         super(context);
@@ -103,8 +100,6 @@ public class SunView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
-        if(pointsCount == 0)
-            return;
         int canvasWidth = getWidth();
         int canvasHeight = getHeight();
 
@@ -117,18 +112,10 @@ public class SunView extends View {
         canvas.drawPath(path, arcPaint);
         drawLights(canvas);
 
-        if(currentHour < sunRiseHour + hours) {
+        if(currentMin < minBetween){
             drawSun(canvas);
         }
 
-    }
-
-    private int findPart(int min){
-        if(min > 40)
-            return 2;
-        if(min > 20)
-            return 1;
-        return 0;
     }
 
     private void initSunPath() {
@@ -145,19 +132,7 @@ public class SunView extends View {
         Timber.e(oval.toString());
 
         pm.setPath(path, false);
-        float pathLength = pm.getLength();
-        float[] xyCoordinate = new float[2];
-        for (int i = 0; i < pointsCount; ++i) {
-            pm.getPosTan(pathLength * i / (pointsCount -1), xyCoordinate, null);
-            Timber.e("Point #%d = (%.0f,%.0f)", i + 1, xyCoordinate[0], xyCoordinate[1]);
-            if( i == 0 || i == pointsCount){
-                boundPoints[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
-            }else{
-                points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
-            }
-        }
-        createIndexedTimePoints();
-//        Timber.e(Arrays.toString(arcPoints));
+
     }
 
     private void drawSun(@NotNull Canvas canvas) {
@@ -170,45 +145,57 @@ public class SunView extends View {
     }
 
     private void drawLights(@NotNull Canvas canvas) {
-        canvas.drawCircle(boundPoints[0][0], boundPoints[0][1], SUN_RADIUS, paint);
-        canvas.drawCircle(boundPoints[1][0], boundPoints[1][1], SUN_RADIUS, paint);
+        canvas.drawCircle(startPoint.x, startPoint.y, SUN_RADIUS, paint);
+        canvas.drawCircle(endPoint.x, endPoint.y, SUN_RADIUS, paint);
     }
 
-    public void init(int hours, int currentHour, int sunRiseHour, int min){
-        this.currentHour = currentHour;
-        this.sunRiseHour = sunRiseHour;
-        this.min = min;
-        Timber.e("current hour: "+currentHour);
-
-        pointsCount = hours * 3;
-        this.hours = hours;
-        Timber.e("points: "+ pointsCount);
-
-        points = new float[hours * 3][hours * 3];
-
+    public void init(int minBetween, int currentMin){
+        this.currentMin = currentMin;
         initSunPath();
+        computeBoundPoints();
+        if(currentMin > minBetween)
+            return;
 
-        invalidate();
+        this.minBetween = minBetween;
+        Timber.e("points: %s", this.minBetween);
+
+        points = new float[minBetween][minBetween];
+
+        float pathLength = pm.getLength();
+        float[] xyCoordinate = new float[2];
+
+        for (int i = 0; i < this.minBetween; ++i) {
+            pm.getPosTan(pathLength * i / (this.minBetween -1), xyCoordinate, null);
+            Timber.e("Point #%d = (%.0f,%.0f)", i + 1, xyCoordinate[0], xyCoordinate[1]);
+            points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
+        }
+        startAnim();
 
         Timber.e("end");
     }
 
-    private void createIndexedTimePoints(){
-        for (int i = sunRiseHour, j = 0; i < pointsCount; ++i, ++j){
-            indexedPoints.put(i, j);
-        }
-    }
+    private void computeBoundPoints(){
+        float pathLength = pm.getLength();
+        float[] xyCoordinate = new float[2];
+        pm.getPosTan(0, xyCoordinate, null);
+        Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
+        startPoint.x = xyCoordinate[0];
+        startPoint.y = xyCoordinate[1];
+        pm.getPosTan(pathLength, xyCoordinate, null);
+        Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
+        endPoint.x = xyCoordinate[0];
+        endPoint.y = xyCoordinate[1];
 
+    }
 
     public void startAnim() {
 
-        int index = indexedPoints.get(currentHour);
-        int timeIndex = index * 3 + findPart(min);
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, timeIndex);
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, currentMin-1);
         valueAnimator.setDuration(1500);
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.addUpdateListener(animation -> {
             currentTimePoint = ((int) animation.getAnimatedValue())+1;
+            Timber.e("currentTimePoint: %s", currentTimePoint);
             invalidate();
         });
         valueAnimator.start();
@@ -318,7 +305,7 @@ public class SunView extends View {
         SunView.SavedState state = new SunView.SavedState(superState);
         state.sunRise = this.sunRise;
         state.sunSet = this.sunSet;
-        state.pointCount = this.pointsCount;
+        state.pointCount = this.minBetween;
         Timber.e("onsave");
         return state;
     }
@@ -329,7 +316,7 @@ public class SunView extends View {
         super.onRestoreInstanceState(savedState.getSuperState());
         this.sunRise = savedState.sunRise;
         this.sunSet = savedState.sunSet;
-        this.pointsCount = savedState.pointCount;
+        this.minBetween = savedState.pointCount;
         invalidate();
         Timber.e("restore");
 //        setChecked(isChecked);
