@@ -5,7 +5,7 @@
     android:padding="16dp"
     android:orientation="vertical">
     <TextView
-        android:text="Pressure unit"
+        android:text="@string/title_pressure"
         android:textColor="#000"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"
@@ -17,17 +17,17 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:id="@+id/rb_mbar"
-            android:text="MBAR"
+            android:text="@string/mbar"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_mmhg"
-            android:text="MMHG"
+            android:text="@string/mmhg"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_hpa"
-            android:text="HPA"
+            android:text="@string/hpa"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RadioGroup>

@@ -5,7 +5,7 @@
     android:padding="16dp"
     android:orientation="vertical">
     <TextView
-        android:text="Temperature unit"
+        android:text="@string/title_temperature"
         android:textColor="#000"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"
@@ -17,17 +17,17 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:id="@+id/rb_celsius"
-            android:text="C"
+            android:text="@string/celsius"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_fahrenheit"
-            android:text="F"
+            android:text="@string/fahrenheit"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_kelvin"
-            android:text="K"
+            android:text="@string/kelvin"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RadioGroup>

@@ -5,7 +5,7 @@
     android:padding="16dp"
     android:orientation="vertical">
     <TextView
-        android:text="Wind speed unit"
+        android:text="@string/title_wind_speed"
         android:textColor="#000"
         android:textStyle="bold"
         android:layout_marginBottom="8dp"
@@ -17,17 +17,17 @@
         android:layout_height="wrap_content">
         <RadioButton
             android:id="@+id/rb_km"
-            android:text="km"
+            android:text="@string/km_per_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_miles"
-            android:text="mi"
+            android:text="@string/miles_per_hour"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
         <RadioButton
             android:id="@+id/rb_meters"
-            android:text="m"
+            android:text="@string/meters_per_second"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RadioGroup>
