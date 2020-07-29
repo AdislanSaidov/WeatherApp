@@ -2,13 +2,14 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:background="#fff"
     android:orientation="vertical"
+    android:background="#fff"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
     <RelativeLayout
         android:id="@+id/rl_temp_unit"
-        android:padding="8dp"
+        android:padding="@dimen/settingCardPadding"
+        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -21,7 +22,7 @@
             android:id="@+id/tv_temp_unit_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/iv_temp_unit_title"
-            android:text="Temperature unit"
+            android:text="@string/title_temperature"
             android:textColor="#000"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
@@ -36,10 +37,14 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
 
     <RelativeLayout
         android:id="@+id/rl_wind_speed_unit"
-        android:padding="8dp"
+        android:padding="@dimen/settingCardPadding"
+        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -53,7 +58,7 @@
             android:id="@+id/tv_wind_speed_unit_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/iv_wind_speed_unit_title"
-            android:text="Wind speed unit"
+            android:text="@string/title_wind_speed"
             android:textColor="#000"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
@@ -68,10 +73,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
     <RelativeLayout
         android:id="@+id/rl_visibility_unit"
-        android:padding="8dp"
+        android:padding="@dimen/settingCardPadding"
+        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -85,7 +93,7 @@
             android:id="@+id/tv_visibility_unit_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/iv_visibility_unit_title"
-            android:text="Visibility unit"
+            android:text="@string/title_visibility"
             android:textColor="#000"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"
@@ -100,10 +108,13 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"/>
     </RelativeLayout>
-
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="0.5dp"/>
     <RelativeLayout
         android:id="@+id/rl_pressure_unit"
-        android:padding="8dp"
+        android:padding="@dimen/settingCardPadding"
+        android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
         <ImageView
@@ -117,7 +128,7 @@
             android:id="@+id/tv_pressure_unit_title"
             android:layout_marginStart="10dp"
             android:layout_toEndOf="@id/iv_pressure_unit_title"
-            android:text="Pressure unit"
+            android:text="@string/title_pressure"
             android:textColor="#000"
             android:layout_alignParentTop="true"
             android:layout_width="wrap_content"

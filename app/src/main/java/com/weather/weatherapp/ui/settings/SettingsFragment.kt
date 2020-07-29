@@ -128,8 +128,11 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
         createDialog(v)
     }
 
-    override fun showCurrentUnits() {
-
+    override fun showCurrentUnits(settings: Settings) {
+        binding.tvCurrentTempUnit.text = settings.temp
+        binding.tvCurrentPressureUnit.text = settings.pressure
+        binding.tvCurrentVisibilityUnit.text = settings.visibility
+        binding.tvCurrentWindSpeedUnit.text = settings.wind
     }
 
 
@@ -137,7 +140,7 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
     private fun createDialog(view: View){
         AlertDialog.Builder(requireContext())
                 .setView(view)
-                .setNegativeButton("CANCEL") { dialog, _ ->  dialog.cancel()}
+                .setNegativeButton(R.string.cancel) { dialog, _ ->  dialog.cancel()}
                 .create()
                 .show()
     }

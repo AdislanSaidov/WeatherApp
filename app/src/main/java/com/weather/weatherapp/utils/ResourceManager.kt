@@ -22,7 +22,14 @@ class ResourceManager(private val context: Context) {
     fun pressureMbar(): String = context.getString(R.string.mbar)
 
     fun visibilityKm(): String = context.getString(R.string.km)
+    fun visibilityMeters(): String = context.getString(R.string.meters)
     fun visibilityMiles(): String = context.getString(R.string.miles)
+
+    fun tempFahrenheit(): String = context.getString(R.string.fahrenheit)
+
+    fun tempCelsius(): String = context.getString(R.string.celsius)
+
+    fun tempKelvin(): String = context.getString(R.string.kelvin)
 
     fun getIconId(pVariableName: String?): Int {
         return try {

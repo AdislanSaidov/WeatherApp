@@ -10,6 +10,10 @@ object Constants {
     const val METERS = 1
     const val MILES = 2
 
+    const val KMPH = 0
+    const val METERSPS = 1
+    const val MILESPS = 2
+
     const val CELSIUS = 0
     const val FAHRENHEIT = 1
     const val KELVIN = 2

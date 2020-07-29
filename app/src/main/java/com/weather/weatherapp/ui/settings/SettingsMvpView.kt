@@ -14,6 +14,6 @@ interface SettingsMvpView : MvpView{
 
     fun showCurrentPressureUnit(unit: Int)
 
-    fun showCurrentUnits()
+    fun showCurrentUnits(settings: Settings)
 
 }
