@@ -7,6 +7,7 @@
         <item name="colorAccent">@color/colorAccent</item>
         <item name="android:textSize">@dimen/normal_sp</item>
         <item name="android:textColor">#fff</item>
+
     </style>
 
     <style name="AppTheme.NoActionBar">

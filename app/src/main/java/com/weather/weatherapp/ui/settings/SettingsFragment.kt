@@ -1,11 +1,11 @@
 package com.weather.weatherapp.ui.settings
 
-import android.app.AlertDialog
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
+import androidx.appcompat.app.AlertDialog
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSettingsBinding
 import com.weather.weatherapp.ui.base.BaseFragment
