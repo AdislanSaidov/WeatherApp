@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSettingsBinding
 import com.weather.weatherapp.ui.base.BaseFragment
@@ -35,6 +36,11 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        val appCompatActivity = activity as AppCompatActivity
+        appCompatActivity.setSupportActionBar(binding.toolbar)
+        appCompatActivity.supportActionBar?.setDisplayHomeAsUpEnabled(true)
+        appCompatActivity.supportActionBar?.setDisplayShowHomeEnabled(true)
+
         binding.rlTempUnit.setOnClickListener {
             presenter.fetchCurrentTempUnit()
         }

@@ -8,6 +8,7 @@ import timber.log.Timber
 
 @InjectViewState
 class HomePresenter(private val repository: Repository, private val weatherDataMapper: WeatherDataMapper): BasePresenter<HomeMvpView>() {
+
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
         fetchWeatherData()

@@ -46,15 +46,14 @@ public class SunView extends View {
     private Path path;
     private PathMeasure pm;
 
-
-    private final RectF oval = new RectF();
     private int minBetween;
     private int currentTimePoint;
+    private int currentMin;
     private float[][] points;
 
+    private final RectF oval = new RectF();
     private final PointF startPoint = new PointF();
     private final PointF endPoint = new PointF();
-    private int currentMin;
 
 
     public SunView(Context context) {
@@ -63,6 +62,7 @@ public class SunView extends View {
     }
 
     private void init() {
+        Timber.e("init");
         paint.setColor(Color.YELLOW);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(TEXT_SIZE);
@@ -100,6 +100,7 @@ public class SunView extends View {
     @Override
     protected void onDraw(Canvas canvas) {
         super.onDraw(canvas);
+
         int canvasWidth = getWidth();
         int canvasHeight = getHeight();
 
@@ -132,10 +133,13 @@ public class SunView extends View {
         Timber.e(oval.toString());
 
         pm.setPath(path, false);
-
+        float f = pm.getLength();
+        Timber.e(f+"");
     }
 
     private void drawSun(@NotNull Canvas canvas) {
+        if(points == null) return;
+        Timber.e("no points "+points.length);
         int bitmapCenterHeight = sunBitmap.getHeight() / 2;
         int bitmapCenterWidth = sunBitmap.getWidth() / 2;
 
@@ -151,8 +155,7 @@ public class SunView extends View {
 
     public void init(int minBetween, int currentMin){
         this.currentMin = currentMin;
-        initSunPath();
-        computeBoundPoints();
+
         if(currentMin > minBetween)
             return;
 
@@ -186,6 +189,12 @@ public class SunView extends View {
         endPoint.x = xyCoordinate[0];
         endPoint.y = xyCoordinate[1];
 
+    }
+
+    @Override
+    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+        initSunPath();
+        computeBoundPoints();
     }
 
     public void startAnim() {
@@ -267,6 +276,11 @@ public class SunView extends View {
         String sunRise;
         String sunSet;
         int pointCount;
+        int currentTimePoint;
+        float startX;
+        float startY;
+        float endX;
+        float endY;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -277,6 +291,7 @@ public class SunView extends View {
             sunRise = in.readString();
             sunSet = in.readString();
             pointCount = in.readInt();
+            currentTimePoint = in.readInt();
         }
 
         @Override
@@ -285,6 +300,11 @@ public class SunView extends View {
             out.writeString(sunRise);
             out.writeString(sunSet);
             out.writeInt(pointCount);
+            out.writeInt(currentTimePoint);
+            out.writeFloat(startX);
+            out.writeFloat(startY);
+            out.writeFloat(endX);
+            out.writeFloat(endY);
         }
 
         public static final Parcelable.Creator<SunView.SavedState> CREATOR = new Parcelable.Creator<SunView.SavedState>() {
@@ -306,6 +326,11 @@ public class SunView extends View {
         state.sunRise = this.sunRise;
         state.sunSet = this.sunSet;
         state.pointCount = this.minBetween;
+        state.currentTimePoint = this.currentTimePoint;
+        state.startX = this.startPoint.x;
+        state.startY = this.startPoint.y;
+        state.endX = this.endPoint.x;
+        state.endY = this.endPoint.y;
         Timber.e("onsave");
         return state;
     }
@@ -317,9 +342,13 @@ public class SunView extends View {
         this.sunRise = savedState.sunRise;
         this.sunSet = savedState.sunSet;
         this.minBetween = savedState.pointCount;
+        this.currentTimePoint = savedState.currentTimePoint;
+        this.startPoint.x = savedState.startX;
+        this.startPoint.y = savedState.startY;
+        this.endPoint.x = savedState.endX;
+        this.endPoint.y = savedState.endY;
         invalidate();
         Timber.e("restore");
-//        setChecked(isChecked);
     }
 
 
