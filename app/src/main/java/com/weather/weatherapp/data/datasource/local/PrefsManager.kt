@@ -39,5 +39,21 @@ class PrefsManager(
         return config
     }
 
+    fun saveTempUnit(temp: Int) {
+        prefs.edit().putInt(TEMP_METRIC_KEY, temp).apply()
+    }
+
+    fun saveWindSpeedUnit(wind: Int) {
+        prefs.edit().putInt(WIND_METRIC_KEY, wind).apply()
+    }
+
+    fun saveVisibilityUnit(visibility: Int) {
+        prefs.edit().putInt(VISIBILITY_METRIC_KEY, visibility).apply()
+    }
+
+    fun savePressureUnit(pressure: Int) {
+        prefs.edit().putInt(PRESSURE_METRIC_KEY, pressure).apply()
+    }
+
 
 }

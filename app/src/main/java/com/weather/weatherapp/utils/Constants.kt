@@ -12,6 +12,7 @@ object Constants {
 
     const val CELSIUS = 0
     const val FAHRENHEIT = 1
+    const val KELVIN = 2
 
     const val HPA = 0
     const val MBAR = 1
