@@ -2,8 +2,11 @@ package com.weather.weatherapp.ui.home
 
 import android.os.Bundle
 import android.view.*
+import androidx.activity.OnBackPressedCallback
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.core.view.GravityCompat
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.weatherapp.R
@@ -36,6 +39,28 @@ class HomeFragment : BaseFragment(), HomeMvpView{
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         initForecasts()
+        initDrawer()
+        initBackButton()
+    }
+
+    private fun initBackButton() {
+        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true){
+            override fun handleOnBackPressed() {
+                if (binding.drawer.isDrawerOpen(GravityCompat.START)){
+                    binding.drawer.closeDrawer(GravityCompat.START)
+                }else{
+                    requireActivity().finish()
+                }
+            }
+        })
+    }
+
+    private fun initDrawer() {
+        val toggle = ActionBarDrawerToggle(
+            activity!!, binding.drawer, binding.toolbar, R.string.app_name, R.string.app_name
+        )
+        binding.drawer.addDrawerListener(toggle)
+        toggle.syncState()
     }
 
     private fun initForecasts() {
@@ -80,7 +105,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
                 findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
             }
             else -> {
-
+                binding.drawer.openDrawer(GravityCompat.START)
             }
         }
         return true

@@ -11,7 +11,10 @@
         <action
             android:id="@+id/action_homeFragment_to_settingsFragment"
             app:destination="@id/settingsFragment"
-            app:enterAnim="@android:anim/fade_in"
+            app:popExitAnim="@transition/slide_out_right"
+            app:enterAnim="@transition/slide_in_right"
+
+            app:popEnterAnim="@android:anim/fade_in"
             app:exitAnim="@android:anim/fade_out" />
     </fragment>
     <fragment

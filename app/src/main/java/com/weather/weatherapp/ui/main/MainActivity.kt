@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.provider.Settings
 import android.util.DisplayMetrics
 import android.view.View
+import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -52,8 +53,6 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     override fun onCreate(savedInstanceState: Bundle?) {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
-        val metrics: DisplayMetrics = resources.displayMetrics
-        Timber.e(metrics.densityDpi.toString())
         locationListener = LocationListener(this, lifecycle){
             mainPresenter.onLocationKnown(lat = it.latitude, lon = it.longitude)
         }
@@ -63,6 +62,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
         navController = findNavController(R.id.nav_host_fragment)
         checkPermission()
     }
+
+
 
     private fun checkPermission() {
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
@@ -98,6 +99,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
     private fun initNavController() {
         navController.graph = navController.navInflater.inflate(R.navigation.nav_graph_main)
+        appBarConfiguration = AppBarConfiguration(navController.graph)
     }
 
     override fun onSupportNavigateUp(): Boolean {
