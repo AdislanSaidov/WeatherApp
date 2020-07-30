@@ -13,10 +13,7 @@ import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
 import java.text.SimpleDateFormat
-import java.time.Instant
-import java.time.LocalDateTime
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 import kotlin.math.roundToInt
 
@@ -47,11 +44,8 @@ class WeatherDataMapper(
                 humidity = "${weatherData.main.humidity} %",
                 sunRise = sdf.format(sunRiseDate),
                 sunSet = sdf.format(sunSetDate),
-                sunHours = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60 * 60)).toInt(),
-                currentHour = Calendar.getInstance().get(Calendar.HOUR_OF_DAY),
-                sunRiseHour = calendar.get(Calendar.HOUR_OF_DAY),
-                currentMin = ((System.currentTimeMillis() - sunRiseDate.time) / (1000 * 60)).toInt(),
-                minBetween = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60)).toInt()
+                currentMinute = ((System.currentTimeMillis() - sunRiseDate.time) / (1000 * 60)).toInt(),
+                minutesBetween = ((sunSetDate.time - sunRiseDate.time) / (1000 * 60)).toInt()
         )
     }
 

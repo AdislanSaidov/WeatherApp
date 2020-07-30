@@ -62,7 +62,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainVisibilityValue.text = weatherData.visibility
         binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
         binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
-        binding.sunViewHomeSunLife.init(weatherData.minBetween, weatherData.currentMin)
+        binding.sunViewHomeSunLife.init(weatherData.minutesBetween, weatherData.currentMinute)
     }
 
     override fun showSunRising() {
