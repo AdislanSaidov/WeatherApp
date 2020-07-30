@@ -9,7 +9,7 @@ class TokenInterceptor(private val apiKey: String) : Interceptor {
     @Throws(IOException::class)
     override fun intercept(chain: Interceptor.Chain): Response {
         val originalRequest = chain.request()
-        val originalHttpUrl = originalRequest.url()
+        val originalHttpUrl = originalRequest.url
         val url = originalHttpUrl.newBuilder()
             .addQueryParameter(API_KEY_QUERY_PARAM, apiKey)
             .build()

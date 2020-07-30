@@ -38,9 +38,11 @@ class DataModule {
     @Provides
     @Singleton
     fun provideOkHttpClient(config: Config): OkHttpClient {
-        val loggingInterceptor = HttpLoggingInterceptor(
-            HttpLoggingInterceptor.Logger { message: String -> Timber.i(message) }
-        )
+        val loggingInterceptor = HttpLoggingInterceptor(object: HttpLoggingInterceptor.Logger {
+            override fun log(message: String) {
+                Timber.i(message)
+            }
+        })
         val tokenInterceptor = TokenInterceptor(config.apiKey)
         val builder = OkHttpClient.Builder()
             .addInterceptor(tokenInterceptor)
