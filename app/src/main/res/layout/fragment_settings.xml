@@ -91,6 +91,7 @@
         android:background="?selectableItemBackground"
         android:layout_width="match_parent"
         android:layout_height="wrap_content">
+
         <ImageView
             android:id="@+id/iv_visibility_unit_title"
             app:srcCompat="@drawable/ic_visibility"
