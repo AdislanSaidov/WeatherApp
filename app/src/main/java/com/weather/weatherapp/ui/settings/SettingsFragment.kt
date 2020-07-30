@@ -7,6 +7,7 @@ import android.view.ViewGroup
 import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.view.ContextThemeWrapper
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSettingsBinding
 import com.weather.weatherapp.ui.base.BaseFragment
@@ -31,7 +32,10 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
     lateinit var presenter: SettingsPresenter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding = FragmentSettingsBinding.inflate(inflater)
+        val contextThemeWrapper = ContextThemeWrapper(activity, R.style.AppTheme_NoActionBar)
+
+        val localInflater = inflater.cloneInContext(contextThemeWrapper)
+        binding = FragmentSettingsBinding.inflate(localInflater)
         return binding.root
     }
 

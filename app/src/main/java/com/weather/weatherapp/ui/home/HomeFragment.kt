@@ -44,7 +44,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     }
 
     private fun initBackButton() {
-        requireActivity().onBackPressedDispatcher.addCallback(object : OnBackPressedCallback(true){
+        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
             override fun handleOnBackPressed() {
                 if (binding.drawer.isDrawerOpen(GravityCompat.START)){
                     binding.drawer.closeDrawer(GravityCompat.START)

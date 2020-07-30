@@ -372,7 +372,7 @@ public class SunView extends View {
     }
 
     private boolean isSunUp() {
-        return currentMinute < minutesBetween;
+        return currentMinute > 0 && currentMinute <= minutesBetween;
     }
 
 
