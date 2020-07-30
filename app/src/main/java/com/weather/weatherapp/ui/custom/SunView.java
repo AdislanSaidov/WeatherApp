@@ -38,22 +38,22 @@ public class SunView extends View {
     private float arcHorizontalMargin = DEFAULT_ARC_MARGIN;
     private static final int TEXT_BOTTOM_MARGIN = (int) (10 * DP);
     private static final int TEXT_SIZE = (int) (14 * DP);
-    private static final int SUN_RADIUS = (int) (8 * DP);
+    private static final int LIGHT_RADIUS = (int) (8 * DP);
 
     private String sunRise = "";
     private String sunSet = "";
     private Bitmap sunBitmap;
-    private Path path;
-    private PathMeasure pm;
 
-    private int minBetween;
-    private int currentTimePoint;
-    private int currentMin;
+    private int minutesBetween;
+    private int currentTimePointIndex;
+    private int currentMinute;
     private float[][] points;
 
-    private final RectF oval = new RectF();
-    private final PointF startPoint = new PointF();
-    private final PointF endPoint = new PointF();
+    private final Path path = new Path();
+    private final PathMeasure pm = new PathMeasure();
+
+    private final PointF startLightPoint = new PointF();
+    private final PointF endLightPoint = new PointF();
 
 
     public SunView(Context context) {
@@ -75,11 +75,6 @@ public class SunView extends View {
         linePaint.setStyle(Paint.Style.STROKE);
 
         sunBitmap = BitmapFactory.decodeResource(getResources(), R.drawable.sun);
-
-        path = new Path();
-
-        pm = new PathMeasure();
-
     }
 
 
@@ -113,7 +108,7 @@ public class SunView extends View {
         canvas.drawPath(path, arcPaint);
         drawLights(canvas);
 
-        if(currentMin < minBetween){
+        if(isSunUp()){
             drawSun(canvas);
         }
 
@@ -123,6 +118,7 @@ public class SunView extends View {
         int canvasWidth = getWidth();
         int canvasHeight = getHeight();
 
+        RectF oval = new RectF();
         oval.left = arcHorizontalMargin;
         oval.top = 5*DP;
         oval.right = canvasWidth - arcHorizontalMargin;
@@ -139,40 +135,42 @@ public class SunView extends View {
 
     private void drawSun(@NotNull Canvas canvas) {
         if(points == null) return;
-        Timber.e("no points "+points.length);
+        Timber.e("points "+points.length);
         int bitmapCenterHeight = sunBitmap.getHeight() / 2;
         int bitmapCenterWidth = sunBitmap.getWidth() / 2;
 
-        float x = points[currentTimePoint][0];
-        float y = points[currentTimePoint][1];
+        float x = points[currentTimePointIndex][0];
+        float y = points[currentTimePointIndex][1];
+        Timber.e("currentTimePoint "+ currentTimePointIndex);
+        Timber.e("x "+x);
+        Timber.e("y "+y);
         canvas.drawBitmap(sunBitmap, x-bitmapCenterWidth, y-bitmapCenterHeight, paint);
     }
 
     private void drawLights(@NotNull Canvas canvas) {
-        canvas.drawCircle(startPoint.x, startPoint.y, SUN_RADIUS, paint);
-        canvas.drawCircle(endPoint.x, endPoint.y, SUN_RADIUS, paint);
+        canvas.drawCircle(startLightPoint.x, startLightPoint.y, LIGHT_RADIUS, paint);
+        canvas.drawCircle(endLightPoint.x, endLightPoint.y, LIGHT_RADIUS, paint);
     }
 
-    public void init(int minBetween, int currentMin){
-        this.currentMin = currentMin;
+    public void init(int minutesBetween, int currentMinute){
+        this.currentMinute = currentMinute;
+        this.minutesBetween = minutesBetween;
 
-        if(currentMin > minBetween)
+        if(!isSunUp())
             return;
 
-        this.minBetween = minBetween;
-        Timber.e("points: %s", this.minBetween);
+        Timber.e("points: %s", this.minutesBetween);
 
-        points = new float[minBetween][minBetween];
+        points = new float[minutesBetween][minutesBetween];
 
         float pathLength = pm.getLength();
         float[] xyCoordinate = new float[2];
 
-        for (int i = 0; i < this.minBetween; ++i) {
-            pm.getPosTan(pathLength * i / (this.minBetween -1), xyCoordinate, null);
+        for (int i = 0; i < this.minutesBetween; ++i) {
+            pm.getPosTan(pathLength * i / (this.minutesBetween -1), xyCoordinate, null);
             Timber.e("Point #%d = (%.0f,%.0f)", i + 1, xyCoordinate[0], xyCoordinate[1]);
             points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
         }
-        startAnim();
 
         Timber.e("end");
     }
@@ -182,29 +180,30 @@ public class SunView extends View {
         float[] xyCoordinate = new float[2];
         pm.getPosTan(0, xyCoordinate, null);
         Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
-        startPoint.x = xyCoordinate[0];
-        startPoint.y = xyCoordinate[1];
+        startLightPoint.x = xyCoordinate[0];
+        startLightPoint.y = xyCoordinate[1];
         pm.getPosTan(pathLength, xyCoordinate, null);
         Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
-        endPoint.x = xyCoordinate[0];
-        endPoint.y = xyCoordinate[1];
+        endLightPoint.x = xyCoordinate[0];
+        endLightPoint.y = xyCoordinate[1];
 
     }
 
     @Override
-    protected void onSizeChanged(int w, int h, int oldw, int oldh) {
+    protected void onSizeChanged(int w, int h, int oldW, int oldH) {
         initSunPath();
         computeBoundPoints();
     }
 
     public void startAnim() {
-
-        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, currentMin-1);
+        if(!isSunUp())
+            return;
+        ValueAnimator valueAnimator = ValueAnimator.ofInt(0, currentMinute -1);
         valueAnimator.setDuration(1500);
         valueAnimator.setInterpolator(new LinearInterpolator());
         valueAnimator.addUpdateListener(animation -> {
-            currentTimePoint = ((int) animation.getAnimatedValue())+1;
-            Timber.e("currentTimePoint: %s", currentTimePoint);
+            currentTimePointIndex = ((int) animation.getAnimatedValue())+1;
+            Timber.e("currentTimePoint: %s", currentTimePointIndex);
             invalidate();
         });
         valueAnimator.start();
@@ -277,10 +276,13 @@ public class SunView extends View {
         String sunSet;
         int pointCount;
         int currentTimePoint;
+        int currentMinute;
         float startX;
         float startY;
         float endX;
         float endY;
+        float sunX;
+        float sunY;
 
         SavedState(Parcelable superState) {
             super(superState);
@@ -292,6 +294,9 @@ public class SunView extends View {
             sunSet = in.readString();
             pointCount = in.readInt();
             currentTimePoint = in.readInt();
+            sunX = in.readFloat();
+            sunY = in.readFloat();
+            currentMinute = in.readInt();
         }
 
         @Override
@@ -301,10 +306,13 @@ public class SunView extends View {
             out.writeString(sunSet);
             out.writeInt(pointCount);
             out.writeInt(currentTimePoint);
+            out.writeInt(currentMinute);
             out.writeFloat(startX);
             out.writeFloat(startY);
             out.writeFloat(endX);
             out.writeFloat(endY);
+            out.writeFloat(sunX);
+            out.writeFloat(sunY);
         }
 
         public static final Parcelable.Creator<SunView.SavedState> CREATOR = new Parcelable.Creator<SunView.SavedState>() {
@@ -325,12 +333,17 @@ public class SunView extends View {
         SunView.SavedState state = new SunView.SavedState(superState);
         state.sunRise = this.sunRise;
         state.sunSet = this.sunSet;
-        state.pointCount = this.minBetween;
-        state.currentTimePoint = this.currentTimePoint;
-        state.startX = this.startPoint.x;
-        state.startY = this.startPoint.y;
-        state.endX = this.endPoint.x;
-        state.endY = this.endPoint.y;
+        state.pointCount = this.minutesBetween;
+        state.currentTimePoint = this.currentTimePointIndex;
+        state.startX = this.startLightPoint.x;
+        state.startY = this.startLightPoint.y;
+        state.endX = this.endLightPoint.x;
+        state.endY = this.endLightPoint.y;
+        state.currentMinute = this.currentMinute;
+        if(this.points != null) {
+            state.sunX = this.points[currentTimePointIndex][0];
+            state.sunY = this.points[currentTimePointIndex][1];
+        }
         Timber.e("onsave");
         return state;
     }
@@ -341,14 +354,25 @@ public class SunView extends View {
         super.onRestoreInstanceState(savedState.getSuperState());
         this.sunRise = savedState.sunRise;
         this.sunSet = savedState.sunSet;
-        this.minBetween = savedState.pointCount;
-        this.currentTimePoint = savedState.currentTimePoint;
-        this.startPoint.x = savedState.startX;
-        this.startPoint.y = savedState.startY;
-        this.endPoint.x = savedState.endX;
-        this.endPoint.y = savedState.endY;
+        this.minutesBetween = savedState.pointCount;
+        this.currentMinute = savedState.currentMinute;
+        this.currentTimePointIndex = savedState.currentTimePoint;
+        this.startLightPoint.x = savedState.startX;
+        this.startLightPoint.y = savedState.startY;
+        this.endLightPoint.x = savedState.endX;
+        this.endLightPoint.y = savedState.endY;
+        this.points = new float[minutesBetween][minutesBetween];
+        Timber.e("current min: "+currentMinute+" min between "+minutesBetween);
+        if(isSunUp()) {
+            this.points[currentTimePointIndex][0] = savedState.sunX;
+            this.points[currentTimePointIndex][1] = savedState.sunY;
+        }
         invalidate();
         Timber.e("restore");
+    }
+
+    private boolean isSunUp() {
+        return currentMinute < minutesBetween;
     }
 
 

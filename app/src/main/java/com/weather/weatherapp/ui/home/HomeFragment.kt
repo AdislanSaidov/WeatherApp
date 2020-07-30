@@ -63,7 +63,10 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
         binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
         binding.sunViewHomeSunLife.init(weatherData.minBetween, weatherData.currentMin)
-//        binding.sunViewHomeSunLife.startAnim()
+    }
+
+    override fun showSunRising() {
+        binding.sunViewHomeSunLife.startAnim()
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

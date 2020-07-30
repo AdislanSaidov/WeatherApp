@@ -29,7 +29,9 @@ class HomePresenter(private val repository: Repository, private val weatherDataM
             .compose(RxUtils.singleAsync())
             .subscribe({weatherData ->
                 val convertedModel = weatherDataMapper.toUiModel(weatherData)
-                viewState.showWeatherData(convertedModel)}, Timber::e)
+                viewState.showWeatherData(convertedModel)
+                viewState.showSunRising()
+            }, Timber::e)
         )
     }
 

@@ -13,4 +13,7 @@ interface HomeMvpView : MvpView{
     fun showForecastData(forecasts: List<UiForecast>)
 
     fun showWeatherData(weatherData: UiWeatherData)
+
+    @StateStrategyType(value = OneExecutionStateStrategy::class)
+    fun showSunRising()
 }
