@@ -16,6 +16,7 @@ import com.weather.weatherapp.domain.models.UiWeatherData
 import com.weather.weatherapp.ui.base.BaseFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -85,9 +86,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         binding.tvMainWindValue.text = weatherData.wind
         binding.tvMainPressureValue.text = weatherData.pressure
         binding.tvMainVisibilityValue.text = weatherData.visibility
-        binding.sunViewHomeSunLife.sunRise = weatherData.sunRise
-        binding.sunViewHomeSunLife.sunSet = weatherData.sunSet
-        binding.sunViewHomeSunLife.init(weatherData.minutesBetween, weatherData.currentMinute)
+        binding.sunViewHomeSunLife.init(weatherData)
     }
 
     override fun showSunRising() {

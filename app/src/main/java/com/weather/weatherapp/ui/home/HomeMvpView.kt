@@ -7,11 +7,12 @@ import moxy.viewstate.strategy.AddToEndSingleStrategy
 import moxy.viewstate.strategy.OneExecutionStateStrategy
 import moxy.viewstate.strategy.StateStrategyType
 
-@StateStrategyType(value = AddToEndSingleStrategy::class)
-interface HomeMvpView : MvpView{
 
+interface HomeMvpView : MvpView{
+    @StateStrategyType(value = AddToEndSingleStrategy::class)
     fun showForecastData(forecasts: List<UiForecast>)
 
+    @StateStrategyType(value = AddToEndSingleStrategy::class)
     fun showWeatherData(weatherData: UiWeatherData)
 
     @StateStrategyType(value = OneExecutionStateStrategy::class)

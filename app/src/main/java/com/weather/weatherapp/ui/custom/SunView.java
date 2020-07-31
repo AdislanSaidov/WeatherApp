@@ -22,6 +22,7 @@ import android.view.animation.LinearInterpolator;
 import androidx.annotation.Nullable;
 
 import com.weather.weatherapp.R;
+import com.weather.weatherapp.domain.models.UiWeatherData;
 
 import org.jetbrains.annotations.NotNull;
 
@@ -48,6 +49,7 @@ public class SunView extends View {
     private int currentTimePointIndex;
     private int currentMinute;
     private float[][] points;
+    private boolean isPointsComputed;
 
     private final Path path = new Path();
     private final PathMeasure pm = new PathMeasure();
@@ -104,14 +106,34 @@ public class SunView extends View {
         int textY = canvasHeight - TEXT_BOTTOM_MARGIN;
         canvas.drawText(sunRise, 0, textY, textPaint);
         canvas.drawText(sunSet, canvasWidth - textPaint.measureText(sunSet), textY, textPaint);
-
         canvas.drawPath(path, arcPaint);
         drawLights(canvas);
 
         if(isSunUp()){
+            computeArcPoints();
             drawSun(canvas);
         }
 
+    }
+
+    private void computeArcPoints() {
+
+        if(!isPointsComputed){
+            Timber.e("points: %s", this.minutesBetween);
+
+            points = new float[minutesBetween][minutesBetween];
+
+            float pathLength = pm.getLength();
+            float[] xyCoordinate = new float[2];
+            for (int i = 0; i < this.minutesBetween; ++i) {
+                pm.getPosTan(pathLength * i / (this.minutesBetween -1), xyCoordinate, null);
+                Timber.e("Point #%d = (%.0f,%.0f)", i + 1, xyCoordinate[0], xyCoordinate[1]);
+                points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
+            }
+
+            Timber.e("end");
+            isPointsComputed = true;
+        }
     }
 
     private void initSunPath() {
@@ -129,13 +151,10 @@ public class SunView extends View {
         Timber.e(oval.toString());
 
         pm.setPath(path, false);
-        float f = pm.getLength();
-        Timber.e(f+"");
     }
 
     private void drawSun(@NotNull Canvas canvas) {
         if(points == null) return;
-        Timber.e("points "+points.length);
         int bitmapCenterHeight = sunBitmap.getHeight() / 2;
         int bitmapCenterWidth = sunBitmap.getWidth() / 2;
 
@@ -152,27 +171,12 @@ public class SunView extends View {
         canvas.drawCircle(endLightPoint.x, endLightPoint.y, LIGHT_RADIUS, paint);
     }
 
-    public void init(int minutesBetween, int currentMinute){
-        this.currentMinute = currentMinute;
-        this.minutesBetween = minutesBetween;
-
-        if(!isSunUp())
-            return;
-
-        Timber.e("points: %s", this.minutesBetween);
-
-        points = new float[minutesBetween][minutesBetween];
-
-        float pathLength = pm.getLength();
-        float[] xyCoordinate = new float[2];
-
-        for (int i = 0; i < this.minutesBetween; ++i) {
-            pm.getPosTan(pathLength * i / (this.minutesBetween -1), xyCoordinate, null);
-            Timber.e("Point #%d = (%.0f,%.0f)", i + 1, xyCoordinate[0], xyCoordinate[1]);
-            points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
-        }
-
-        Timber.e("end");
+    public void init(UiWeatherData weatherData){
+        this.currentMinute = weatherData.getCurrentMinute();
+        this.minutesBetween = weatherData.getMinutesBetween();
+        this.sunSet = weatherData.getSunSet();
+        this.sunRise = weatherData.getSunRise();
+        invalidate();
     }
 
     private void computeBoundPoints(){
@@ -186,7 +190,6 @@ public class SunView extends View {
         Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
         endLightPoint.x = xyCoordinate[0];
         endLightPoint.y = xyCoordinate[1];
-
     }
 
     @Override
@@ -242,33 +245,6 @@ public class SunView extends View {
 
         setMeasuredDimension(width, height);
     }
-
-    public String getSunRise() {
-        return sunRise;
-    }
-
-    public void setSunRise(String sunRise) {
-        this.sunRise = sunRise;
-        invalidate();
-    }
-
-    public String getSunSet() {
-        return sunSet;
-    }
-
-    public void setSunSet(String sunSet) {
-        this.sunSet = sunSet;
-        invalidate();
-    }
-
-    public float getArcHorizontalMargin() {
-        return arcHorizontalMargin;
-    }
-
-    public void setArcHorizontalMargin(float arcHorizontalMargin) {
-        this.arcHorizontalMargin = arcHorizontalMargin;
-    }
-
 
     static class SavedState extends BaseSavedState {
 
@@ -374,6 +350,5 @@ public class SunView extends View {
     private boolean isSunUp() {
         return currentMinute > 0 && currentMinute <= minutesBetween;
     }
-
 
 }
