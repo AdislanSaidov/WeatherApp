@@ -49,7 +49,7 @@ public class SunView extends View {
     private int currentTimePointIndex;
     private int currentMinute;
     private float[][] points;
-    private boolean isPointsComputed;
+    private boolean arePointsComputed;
 
     private final Path path = new Path();
     private final PathMeasure pm = new PathMeasure();
@@ -118,7 +118,7 @@ public class SunView extends View {
 
     private void computeArcPoints() {
 
-        if(!isPointsComputed){
+        if(!arePointsComputed){
             Timber.e("points: %s", this.minutesBetween);
 
             points = new float[minutesBetween][minutesBetween];
@@ -131,8 +131,7 @@ public class SunView extends View {
                 points[i] = new float[]{xyCoordinate[0], xyCoordinate[1]};
             }
 
-            Timber.e("end");
-            isPointsComputed = true;
+            arePointsComputed = true;
         }
     }
 
