@@ -17,4 +17,7 @@ interface HomeMvpView : MvpView{
 
     @StateStrategyType(value = OneExecutionStateStrategy::class)
     fun showSunRising()
+
+    @StateStrategyType(value = OneExecutionStateStrategy::class)
+    fun showFavorites()
 }

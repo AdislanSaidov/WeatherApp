@@ -42,6 +42,12 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         initForecasts()
         initDrawer()
         initBackButton()
+        binding.drawerContent.ivToolbarBack.setOnClickListener {
+            binding.drawer.closeDrawer(GravityCompat.START)
+        }
+        binding.drawerContent.ivToolbarSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
 
     private fun initBackButton() {
@@ -91,6 +97,10 @@ class HomeFragment : BaseFragment(), HomeMvpView{
 
     override fun showSunRising() {
         binding.sunViewHomeSunLife.startAnim()
+    }
+
+    override fun showFavorites() {
+
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {

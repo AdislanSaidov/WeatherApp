@@ -61,6 +61,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
         setContentView(activityMainBinding.root)
         navController = findNavController(R.id.nav_host_fragment)
         checkPermission()
+
     }
 
 
@@ -122,6 +123,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
     override fun showHomeScreen() {
         initNavController()
+        lifecycle.removeObserver(locationListener)
         activityMainBinding.clMainLayout.visibility = View.VISIBLE
         activityMainBinding.flSplash.visibility = View.GONE
     }

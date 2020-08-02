@@ -35,4 +35,7 @@
     <string name="celsius" translatable="false">°C</string>
     <string name="kelvin" translatable="false">°K</string>
     <string name="meters" >m</string>
+    <string name="favorites">Favorites</string>
+    <string name="search_hint">City or area</string>
+    <string name="empty_result">Nothing found matching your query</string>
 </resources>
