@@ -1,4 +1,4 @@
-package com.weather.weatherapp.data.api
+package com.weather.weatherapp.data.api.weather
 
 import com.weather.weatherapp.utils.Constants.API_KEY_QUERY_PARAM
 import okhttp3.Interceptor

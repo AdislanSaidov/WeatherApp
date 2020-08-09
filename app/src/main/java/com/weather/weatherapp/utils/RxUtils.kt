@@ -1,9 +1,6 @@
 package com.weather.weatherapp.utils
 
-import io.reactivex.Completable
-import io.reactivex.CompletableTransformer
-import io.reactivex.Single
-import io.reactivex.SingleTransformer
+import io.reactivex.*
 import io.reactivex.android.schedulers.AndroidSchedulers
 import io.reactivex.schedulers.Schedulers
 
@@ -18,6 +15,14 @@ object RxUtils {
 
     fun compAsync(): CompletableTransformer {
         return CompletableTransformer { upstream: Completable ->
+            upstream
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+        }
+    }
+
+    fun <T> async(): ObservableTransformer<T, T> {
+        return ObservableTransformer { upstream: Observable<T>->
             upstream
                 .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

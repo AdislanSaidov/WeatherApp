@@ -1,4 +1,4 @@
-package com.weather.weatherapp.data.api
+package com.weather.weatherapp.data.api.weather
 
 import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
@@ -8,7 +8,7 @@ import retrofit2.http.GET
 import retrofit2.http.Query
 
 
-interface ApiService {
+interface WeatherApiService {
 
     @GET("forecast")
     fun forecast(@Query("id") id: String, @Query("lang") lang: String): Single<Response<ForecastData>>

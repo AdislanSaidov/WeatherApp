@@ -1,8 +1,11 @@
 package com.weather.weatherapp.utils
 
 object Constants {
-    const val BASE_URL = "https://api.openweathermap.org/data/2.5/"
+    const val WEATHER_API_URL = "https://api.openweathermap.org/data/2.5/"
     const val API_KEY_QUERY_PARAM = "APPID"
+
+    const val CITY_API_URL = "https://nominatim.openstreetmap.org/"
+
     const val DEFAULT_UNITS = "metric"
     const val DEFAULT_LANG = "en"
 

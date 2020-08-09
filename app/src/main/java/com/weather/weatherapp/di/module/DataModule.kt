@@ -2,13 +2,17 @@ package com.weather.weatherapp.di.module
 
 import android.content.Context
 import android.content.SharedPreferences
-import com.weather.weatherapp.data.api.ApiService
-import com.weather.weatherapp.data.api.TokenInterceptor
+import com.weather.weatherapp.data.api.areas.AreasApiService
+import com.weather.weatherapp.data.api.weather.WeatherApiService
+import com.weather.weatherapp.data.api.weather.TokenInterceptor
 import com.weather.weatherapp.data.datasource.Repository
+import com.weather.weatherapp.data.datasource.SearchRepository
 import com.weather.weatherapp.data.datasource.local.PrefsManager
-import com.weather.weatherapp.data.datasource.remote.RemoteDataSource
+import com.weather.weatherapp.data.datasource.remote.AreasRemoteDataSource
+import com.weather.weatherapp.data.datasource.remote.WeatherRemoteDataSource
 import com.weather.weatherapp.data.models.Config
-import com.weather.weatherapp.utils.Constants.BASE_URL
+import com.weather.weatherapp.utils.Constants.CITY_API_URL
+import com.weather.weatherapp.utils.Constants.WEATHER_API_URL
 import dagger.Module
 import dagger.Provides
 import okhttp3.OkHttpClient
@@ -18,6 +22,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 import retrofit2.converter.gson.GsonConverterFactory
 import timber.log.Timber
 import java.util.concurrent.TimeUnit
+import javax.inject.Named
 import javax.inject.Singleton
 
 @Module
@@ -26,13 +31,26 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRetrofit(client: OkHttpClient): Retrofit {
-        return Retrofit.Builder().baseUrl(BASE_URL)
+    @Named("weather")
+    fun provideWeatherRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+            .baseUrl(WEATHER_API_URL)
             .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
             .addConverterFactory(GsonConverterFactory.create())
-            .baseUrl(BASE_URL)
             .client(client)
             .build()
+    }
+
+    @Provides
+    @Singleton
+    @Named("city")
+    fun provideCityRetrofit(client: OkHttpClient): Retrofit {
+        return Retrofit.Builder()
+                .baseUrl(CITY_API_URL)
+                .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+                .addConverterFactory(GsonConverterFactory.create())
+                .client(client)
+                .build()
     }
 
     @Provides
@@ -59,17 +77,32 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRetrofitService(retrofit: Retrofit): ApiService {
-        return retrofit.create(ApiService::class.java)
+    fun provideWeatherRetrofitService(@Named("weather") retrofit: Retrofit): WeatherApiService {
+        return retrofit.create(WeatherApiService::class.java)
     }
 
     @Provides
     @Singleton
-    fun provideRemoteDataSource(apiService: ApiService): RemoteDataSource = RemoteDataSource(apiService)
+    fun provideCityRetrofitService(@Named("city") retrofit: Retrofit): AreasApiService {
+        return retrofit.create(AreasApiService::class.java)
+    }
 
     @Provides
     @Singleton
-    fun provideRepository(remoteDataSource: RemoteDataSource, prefsManager: PrefsManager, config: Config): Repository = Repository(remoteDataSource, prefsManager, config)
+    fun provideAreasRemoteDataSource(areasApiService: AreasApiService): AreasRemoteDataSource = AreasRemoteDataSource(areasApiService)
+
+    @Provides
+    @Singleton
+    fun provideRemoteDataSource(apiService: WeatherApiService): WeatherRemoteDataSource = WeatherRemoteDataSource(apiService)
+
+    @Provides
+    @Singleton
+    fun provideRepository(remoteDataSource: WeatherRemoteDataSource, prefsManager: PrefsManager, config: Config): Repository = Repository(remoteDataSource, prefsManager, config)
+
+    @Provides
+    @Singleton
+    fun provideSearchRepository(remoteDataSource: AreasRemoteDataSource): SearchRepository = SearchRepository(remoteDataSource)
+
 
     @Provides
     @Singleton

@@ -1,12 +1,12 @@
 package com.weather.weatherapp.data.datasource.remote
 
-import com.weather.weatherapp.data.api.ApiService
+import com.weather.weatherapp.data.api.weather.WeatherApiService
 import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
 import io.reactivex.Single
 import retrofit2.Response
 
-class RemoteDataSource(private val apiService: ApiService) {
+class WeatherRemoteDataSource(private val apiService: WeatherApiService) {
 
 
     fun fetchForecastData(id: String, lang: String): Single<Response<ForecastData>> = apiService.forecast(id, lang)

@@ -9,11 +9,6 @@ open class BasePresenter<T: MvpView> : MvpPresenter<T>() {
 
     val disposable = CompositeDisposable()
 
-    override fun onFirstViewAttach() {
-        super.onFirstViewAttach()
-    }
-
-
 
 
 }

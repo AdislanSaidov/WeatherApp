@@ -44,7 +44,8 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"/>
     <TextView
-        android:text="@string/empty_result"
+        android:id="@+id/tv_empty"
+        android:text="@string/enterAddress"
         android:textColor="#000"
         android:layout_width="match_parent"
         android:gravity="center"

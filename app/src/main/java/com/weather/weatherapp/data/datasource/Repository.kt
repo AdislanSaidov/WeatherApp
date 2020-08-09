@@ -1,16 +1,16 @@
 package com.weather.weatherapp.data.datasource
 
 import com.weather.weatherapp.data.datasource.local.PrefsManager
-import com.weather.weatherapp.data.datasource.remote.RemoteDataSource
+import com.weather.weatherapp.data.datasource.remote.WeatherRemoteDataSource
 import com.weather.weatherapp.data.models.Config
 import com.weather.weatherapp.data.models.ForecastData
 import com.weather.weatherapp.data.models.WeatherData
 import io.reactivex.Single
 
 class Repository(
-    private val remoteDataSource: RemoteDataSource,
-    private val prefsManager: PrefsManager,
-    private val config: Config
+        private val remoteDataSource: WeatherRemoteDataSource,
+        private val prefsManager: PrefsManager,
+        private val config: Config
 ) {
 
     fun fetchForecastData(): Single<ForecastData> {

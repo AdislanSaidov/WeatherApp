@@ -39,8 +39,10 @@ android {
         targetCompatibility JavaVersion.VERSION_1_8
     }
 
-    viewBinding{
-        enabled = true
+    buildFeatures{
+        viewBinding{
+            enabled = true
+        }
     }
     lintOptions {
         disable 'ContentDescription'
@@ -88,6 +90,7 @@ dependencies {
     //RxJava
     implementation 'io.reactivex.rxjava2:rxandroid:2.1.1'
     implementation 'io.reactivex.rxjava2:rxjava:2.2.17'
+    implementation 'com.jakewharton.rxrelay2:rxrelay:2.1.1'
 
     //Dagger
     implementation "com.google.dagger:dagger:$dagger"
