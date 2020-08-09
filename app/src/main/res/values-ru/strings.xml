@@ -29,7 +29,11 @@
     <string name="title_wind_speed">Скорость ветра</string>
     <string name="title_visibility">Видимость</string>
     <string name="title_pressure">Давление</string>
-    <string name="cancel">Отмена</string>
+    <string name="ok">Ок</string>
     <string name="meters" >м</string>
-
+    <string name="favorites">Избранное</string>
+    <string name="search_hint">Город или  нас. пункт</string>
+    <string name="empty_result">Ничего не найдено</string>
+    <string name="enterAddress">Введите адрес</string>
+    <string name="search">Поиск</string>
 </resources>

@@ -4,7 +4,6 @@ import com.jakewharton.rxrelay2.PublishRelay
 import com.weather.weatherapp.data.datasource.SearchRepository
 import com.weather.weatherapp.ui.base.BasePresenter
 import com.weather.weatherapp.utils.RxUtils
-import io.reactivex.Observable
 import moxy.InjectViewState
 import timber.log.Timber
 import java.util.concurrent.TimeUnit

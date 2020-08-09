@@ -16,7 +16,6 @@ import com.weather.weatherapp.domain.models.UiWeatherData
 import com.weather.weatherapp.ui.base.BaseFragment
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -24,9 +23,9 @@ class HomeFragment : BaseFragment(), HomeMvpView{
 
     @Inject
     @InjectPresenter
-    lateinit var mainPresenter: HomePresenter
+    lateinit var presenter: HomePresenter
     @Inject
-    private lateinit var forecastAdapter: ForecastAdapter
+    lateinit var forecastAdapter: ForecastAdapter
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -123,7 +122,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     }
 
     @ProvidePresenter
-    fun providePresenter(): HomePresenter = mainPresenter
+    fun providePresenter(): HomePresenter = presenter
 
     override fun onDestroyView() {
         super.onDestroyView()

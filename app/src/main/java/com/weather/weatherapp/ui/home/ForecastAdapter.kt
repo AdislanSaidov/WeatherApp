@@ -1,13 +1,10 @@
 package com.weather.weatherapp.ui.home
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
-import android.widget.TextView
 import androidx.core.content.ContextCompat
 import androidx.recyclerview.widget.RecyclerView
-import com.weather.weatherapp.R
+import com.weather.weatherapp.databinding.ViewForecastItemBinding
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.ui.home.ForecastAdapter.ForecastViewHolder
 import java.util.*
@@ -23,27 +20,22 @@ class ForecastAdapter : RecyclerView.Adapter<ForecastViewHolder>() {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ForecastViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        val view = inflater.inflate(R.layout.view_forecast_item, parent, false)
-        return ForecastViewHolder(view)
+        val binding = ViewForecastItemBinding.inflate(inflater, parent, false)
+        return ForecastViewHolder(binding)
     }
 
     override fun onBindViewHolder(holder: ForecastViewHolder, position: Int) {
         holder.bind(forecasts[position])
     }
 
-    override fun getItemCount(): Int {
-        return forecasts.size
-    }
+    override fun getItemCount() = forecasts.size
 
-    inner class ForecastViewHolder(view: View) : RecyclerView.ViewHolder(view){
-        private var tvTime: TextView = view.findViewById(R.id.tv_time)
-        private var ivWeather: ImageView = view.findViewById(R.id.iv_weather_icon)
-        private var tvTemp: TextView = view.findViewById(R.id.tv_temp)
+    inner class ForecastViewHolder(private val binding: ViewForecastItemBinding) : RecyclerView.ViewHolder(binding.root){
 
         fun bind(forecast: UiForecast){
-            tvTime.text = forecast.dt
-            ivWeather.setImageDrawable(ContextCompat.getDrawable(itemView.context, forecast.icon))
-            tvTemp.text = forecast.temp
+            binding.tvTime.text = forecast.dt
+            binding.ivWeatherIcon.setImageDrawable(ContextCompat.getDrawable(itemView.context, forecast.icon))
+            binding.tvTemp.text = forecast.temp
         }
     }
 }

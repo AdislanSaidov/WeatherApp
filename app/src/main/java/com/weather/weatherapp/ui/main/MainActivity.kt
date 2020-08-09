@@ -34,7 +34,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     lateinit var androidInjector: DispatchingAndroidInjector<Any>
     @InjectPresenter
     @Inject
-    lateinit var mainPresenter: MainPresenter
+    lateinit var presenter: MainPresenter
 
     private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
@@ -51,7 +51,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
         AndroidInjection.inject(this)
         super.onCreate(savedInstanceState)
         locationListener = LocationListener(this, lifecycle){
-            mainPresenter.onLocationKnown(lat = it.latitude, lon = it.longitude)
+            presenter.onLocationKnown(lat = it.latitude, lon = it.longitude)
         }
         lifecycle.addObserver(locationListener)
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -127,7 +127,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
 
 
     @ProvidePresenter
-    fun providePresenter(): MainPresenter = mainPresenter
+    fun providePresenter(): MainPresenter = presenter
 
     override fun androidInjector(): AndroidInjector<Any> = androidInjector
 

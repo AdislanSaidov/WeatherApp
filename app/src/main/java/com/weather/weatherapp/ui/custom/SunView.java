@@ -64,7 +64,6 @@ public class SunView extends View {
     }
 
     private void init() {
-        Timber.e("init");
         paint.setColor(Color.YELLOW);
         textPaint.setColor(Color.WHITE);
         textPaint.setTextSize(TEXT_SIZE);
@@ -159,9 +158,6 @@ public class SunView extends View {
 
         float x = points[currentTimePointIndex][0];
         float y = points[currentTimePointIndex][1];
-        Timber.e("currentTimePoint "+ currentTimePointIndex);
-        Timber.e("x "+x);
-        Timber.e("y "+y);
         canvas.drawBitmap(sunBitmap, x-bitmapCenterWidth, y-bitmapCenterHeight, paint);
     }
 
@@ -182,11 +178,9 @@ public class SunView extends View {
         float pathLength = pm.getLength();
         float[] xyCoordinate = new float[2];
         pm.getPosTan(0, xyCoordinate, null);
-        Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
         startLightPoint.x = xyCoordinate[0];
         startLightPoint.y = xyCoordinate[1];
         pm.getPosTan(pathLength, xyCoordinate, null);
-        Timber.e("AAAA # = (%.0f,%.0f)", xyCoordinate[0], xyCoordinate[1]);
         endLightPoint.x = xyCoordinate[0];
         endLightPoint.y = xyCoordinate[1];
     }
@@ -319,7 +313,6 @@ public class SunView extends View {
             state.sunX = this.points[currentTimePointIndex][0];
             state.sunY = this.points[currentTimePointIndex][1];
         }
-        Timber.e("onsave");
         return state;
     }
 
@@ -337,13 +330,11 @@ public class SunView extends View {
         this.endLightPoint.x = savedState.endX;
         this.endLightPoint.y = savedState.endY;
         this.points = new float[minutesBetween][minutesBetween];
-        Timber.e("current min: "+currentMinute+" min between "+minutesBetween);
         if(isSunUp()) {
             this.points[currentTimePointIndex][0] = savedState.sunX;
             this.points[currentTimePointIndex][1] = savedState.sunY;
         }
         invalidate();
-        Timber.e("restore");
     }
 
     private boolean isSunUp() {

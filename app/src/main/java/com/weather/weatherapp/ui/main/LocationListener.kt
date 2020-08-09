@@ -10,7 +10,7 @@ import com.google.android.gms.location.*
 import timber.log.Timber
 
 class LocationListener(
-    private val context: Context,
+    context: Context,
     private val lifecycle: Lifecycle,
     private val callback: (Location) -> Unit
 ): LifecycleObserver {

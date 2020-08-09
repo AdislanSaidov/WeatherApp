@@ -9,7 +9,6 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import com.weather.weatherapp.R
-import com.weather.weatherapp.databinding.FragmentSearchBinding
 import com.weather.weatherapp.databinding.FragmentSettingsBinding
 import com.weather.weatherapp.ui.base.BaseFragment
 import com.weather.weatherapp.utils.Constants.CELSIUS
@@ -152,7 +151,7 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
     private fun createDialog(view: View){
         AlertDialog.Builder(requireContext())
                 .setView(view)
-                .setNegativeButton(R.string.cancel) { dialog, _ ->  dialog.cancel()}
+                .setNegativeButton(R.string.ok) { dialog, _ ->  dialog.cancel()}
                 .create()
                 .show()
     }

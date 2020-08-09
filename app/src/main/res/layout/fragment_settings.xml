@@ -59,7 +59,7 @@
             android:id="@+id/iv_wind_speed_unit_title"
             app:srcCompat="@drawable/ic_wind"
             android:layout_centerVertical="true"
-            android:tint="#000"
+            app:tint="#000"
             android:layout_width="24dp"
             android:layout_height="24dp"/>
         <TextView
@@ -94,7 +94,7 @@
         <ImageView
             android:id="@+id/iv_visibility_unit_title"
             app:srcCompat="@drawable/ic_visibility"
-            android:tint="#000"
+            app:tint="#000"
             android:layout_centerVertical="true"
             android:layout_width="24dp"
             android:layout_height="24dp"/>
@@ -130,7 +130,7 @@
             android:id="@+id/iv_pressure_unit_title"
             app:srcCompat="@drawable/ic_pressure"
             android:layout_centerVertical="true"
-            android:tint="#000"
+            app:tint="#000"
             android:layout_width="24dp"
             android:layout_height="24dp"/>
         <TextView

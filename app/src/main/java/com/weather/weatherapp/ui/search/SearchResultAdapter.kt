@@ -19,7 +19,7 @@ class SearchResultAdapter: RecyclerView.Adapter<SearchResultAdapter.AreasViewHol
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AreasViewHolder {
         val inflater = LayoutInflater.from(parent.context)
-        return AreasViewHolder(ViewSearchAreaBinding.inflate(inflater))
+        return AreasViewHolder(ViewSearchAreaBinding.inflate(inflater, parent, false))
     }
 
     override fun getItemCount() = areas.size

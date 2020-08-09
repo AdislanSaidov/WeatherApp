@@ -6,7 +6,6 @@ import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.widget.addTextChangedListener
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.weatherapp.R
@@ -22,7 +21,7 @@ class SearchFragment: BaseFragment(), SearchMvp {
 
     @Inject
     @InjectPresenter
-    lateinit var searchPresenter: SearchPresenter
+    lateinit var presenter: SearchPresenter
     @Inject
     lateinit var searchResultAdapter: SearchResultAdapter
 
@@ -38,7 +37,7 @@ class SearchFragment: BaseFragment(), SearchMvp {
                 } else {
                     binding.ivClear.visibility = View.VISIBLE
                 }
-                searchPresenter.onSearchQueryChanged(it.toString())
+                presenter.onSearchQueryChanged(it.toString())
             }
         }
         override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
@@ -101,5 +100,5 @@ class SearchFragment: BaseFragment(), SearchMvp {
     }
 
     @ProvidePresenter
-    fun providePresenter() = searchPresenter
+    fun providePresenter() = presenter
 }
