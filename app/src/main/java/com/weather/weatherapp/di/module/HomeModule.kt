@@ -2,6 +2,7 @@ package com.weather.weatherapp.di.module
 
 import com.weather.weatherapp.data.datasource.Repository
 import com.weather.weatherapp.data.models.Config
+import com.weather.weatherapp.ui.home.ForecastAdapter
 import com.weather.weatherapp.ui.home.HomePresenter
 import com.weather.weatherapp.ui.home.WeatherDataMapper
 import com.weather.weatherapp.utils.MetricsConverter
@@ -23,4 +24,6 @@ class HomeModule {
     @Provides
     fun provideHomePresenter(repository: Repository, weatherDataMapper: WeatherDataMapper): HomePresenter = HomePresenter(repository, weatherDataMapper)
 
+    @Provides
+    fun provideForecastAdapter(): ForecastAdapter = ForecastAdapter()
 }

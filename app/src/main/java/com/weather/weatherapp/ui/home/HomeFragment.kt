@@ -27,10 +27,11 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     @Inject
     @InjectPresenter
     lateinit var mainPresenter: HomePresenter
-    private val forecastAdapter = ForecastAdapter()
+    @Inject
+    private lateinit var forecastAdapter: ForecastAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val contextThemeWrapper = ContextThemeWrapper(activity, R.style.AppTheme_NoActionBar)
+        val contextThemeWrapper = ContextThemeWrapper(requireContext(), R.style.AppTheme_NoActionBar)
 
         val localInflater = inflater.cloneInContext(contextThemeWrapper)
         setHasOptionsMenu(true)
@@ -64,7 +65,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
 
     private fun initDrawer() {
         val toggle = ActionBarDrawerToggle(
-            activity!!, binding.drawer, binding.toolbar, R.string.app_name, R.string.app_name
+            requireActivity(), binding.drawer, binding.toolbar, R.string.app_name, R.string.app_name
         )
         binding.drawer.addDrawerListener(toggle)
         toggle.syncState()
