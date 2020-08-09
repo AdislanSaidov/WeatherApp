@@ -6,9 +6,7 @@ import android.content.pm.PackageManager
 import android.location.LocationManager
 import android.os.Bundle
 import android.provider.Settings
-import android.util.DisplayMetrics
 import android.view.View
-import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AlertDialog
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
@@ -26,7 +24,6 @@ import dagger.android.HasAndroidInjector
 import moxy.MvpAppCompatActivity
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
-import timber.log.Timber
 import javax.inject.Inject
 import kotlin.system.exitProcess
 
@@ -39,7 +36,7 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     @Inject
     lateinit var mainPresenter: MainPresenter
 
-    private lateinit var activityMainBinding: ActivityMainBinding
+    private lateinit var binding: ActivityMainBinding
     private lateinit var appBarConfiguration: AppBarConfiguration
     private lateinit var locationListener: LocationListener
     private lateinit var navController: NavController
@@ -57,8 +54,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
             mainPresenter.onLocationKnown(lat = it.latitude, lon = it.longitude)
         }
         lifecycle.addObserver(locationListener)
-        activityMainBinding = ActivityMainBinding.inflate(layoutInflater)
-        setContentView(activityMainBinding.root)
+        binding = ActivityMainBinding.inflate(layoutInflater)
+        setContentView(binding.root)
         navController = findNavController(R.id.nav_host_fragment)
         checkPermission()
 
@@ -124,8 +121,8 @@ class MainActivity : MvpAppCompatActivity(), MainMvpView, HasAndroidInjector {
     override fun showHomeScreen() {
         initNavController()
         lifecycle.removeObserver(locationListener)
-        activityMainBinding.clMainLayout.visibility = View.VISIBLE
-        activityMainBinding.flSplash.visibility = View.GONE
+        binding.clMainLayout.visibility = View.VISIBLE
+        binding.flSplash.visibility = View.GONE
     }
 
 

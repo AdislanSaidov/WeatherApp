@@ -25,7 +25,9 @@ class SearchFragment: BaseFragment(), SearchMvp {
     lateinit var searchPresenter: SearchPresenter
     @Inject
     lateinit var searchResultAdapter: SearchResultAdapter
-    private lateinit var binding: FragmentSearchBinding
+
+    private var _binding: FragmentSearchBinding? = null
+    private val binding get() = _binding!!
 
     private val textWatcher = object : TextWatcher {
         override fun afterTextChanged(s: Editable?) {
@@ -48,7 +50,7 @@ class SearchFragment: BaseFragment(), SearchMvp {
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-        binding = FragmentSearchBinding.inflate(layoutInflater)
+        _binding = FragmentSearchBinding.inflate(layoutInflater)
         return binding.root
     }
 
@@ -93,8 +95,9 @@ class SearchFragment: BaseFragment(), SearchMvp {
     }
 
     override fun onDestroyView() {
-        binding.etSearch.removeTextChangedListener(textWatcher)
         super.onDestroyView()
+        binding.etSearch.removeTextChangedListener(textWatcher)
+        _binding = null
     }
 
     @ProvidePresenter

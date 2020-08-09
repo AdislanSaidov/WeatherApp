@@ -22,20 +22,21 @@ import javax.inject.Inject
 
 class HomeFragment : BaseFragment(), HomeMvpView{
 
-    private lateinit var binding: FragmentHomeBinding
-
     @Inject
     @InjectPresenter
     lateinit var mainPresenter: HomePresenter
     @Inject
     private lateinit var forecastAdapter: ForecastAdapter
 
+    private var _binding: FragmentHomeBinding? = null
+    private val binding get() = _binding!!
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         val contextThemeWrapper = ContextThemeWrapper(requireContext(), R.style.AppTheme_NoActionBar)
 
         val localInflater = inflater.cloneInContext(contextThemeWrapper)
         setHasOptionsMenu(true)
-        binding = FragmentHomeBinding.inflate(localInflater)
+        _binding = FragmentHomeBinding.inflate(localInflater)
         return binding.root
     }
 
@@ -124,4 +125,8 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     @ProvidePresenter
     fun providePresenter(): HomePresenter = mainPresenter
 
+    override fun onDestroyView() {
+        super.onDestroyView()
+        _binding = null
+    }
 }
