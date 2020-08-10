@@ -11,6 +11,10 @@ class HomePresenter(private val repository: Repository, private val weatherDataM
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
+        fetchData()
+    }
+
+    fun fetchData(){
         fetchWeatherData()
         fetchForecastData()
     }

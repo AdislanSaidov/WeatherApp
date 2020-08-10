@@ -50,13 +50,16 @@ android {
         disable 'RtlSymmetry'
         disable 'MissingPermission'
     }
+    kotlinOptions {
+        jvmTarget = '1.8'
+    }
 
 }
 
 dependencies {
     def moxyVersion = '2.0.2'
     def dagger = '2.28.3'
-    def navigation = '2.3.0-alpha02'
+    def navigation = '2.3.0'
     def retrofit = '2.9.0'
     def okHttp = '4.8.0'
     def glide = '4.11.0'
@@ -100,8 +103,8 @@ dependencies {
     implementation "com.google.dagger:dagger-android-support:$dagger"
 
     //Navigation
-    implementation "android.arch.navigation:navigation-fragment-ktx:$navigation"
-    implementation "android.arch.navigation:navigation-ui-ktx:$navigation"
+    implementation "androidx.navigation:navigation-fragment-ktx:$navigation"
+    implementation "androidx.navigation:navigation-ui-ktx:$navigation"
 
     //Moxy
     implementation "com.github.moxy-community:moxy:$moxyVersion"

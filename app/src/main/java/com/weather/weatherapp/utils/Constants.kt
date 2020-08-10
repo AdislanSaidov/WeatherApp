@@ -35,4 +35,6 @@ object Constants {
 
     const val PRESSURE_METRIC_KEY = "pressure_metric_key"
     const val PRESSURE_METRIC_DEFAULT_VALUE = MBAR
+
+    const val SETTINGS_UPDATED_KEY = "settings_updated_key"
 }

@@ -1,5 +1,6 @@
 package com.weather.weatherapp.di.module
 
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.data.datasource.Repository
 import com.weather.weatherapp.data.models.Config
 import com.weather.weatherapp.ui.home.ForecastAdapter
@@ -14,11 +15,11 @@ import dagger.Provides
 class HomeModule {
 
     @Provides
-    fun provideWeatherDataMapper(resourceManager: ResourceManager, metricsConverter: MetricsConverter, config: Config): WeatherDataMapper
+    fun provideWeatherDataMapper(resourceManager: ResourceManager, metricsConverter: MetricsConverter, configManager: ConfigManager): WeatherDataMapper
             = WeatherDataMapper(
         resourceManager,
         metricsConverter,
-        config
+        configManager
     )
 
     @Provides

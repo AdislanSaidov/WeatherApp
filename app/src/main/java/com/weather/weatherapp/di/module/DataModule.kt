@@ -2,6 +2,7 @@ package com.weather.weatherapp.di.module
 
 import android.content.Context
 import android.content.SharedPreferences
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.data.api.areas.AreasApiService
 import com.weather.weatherapp.data.api.weather.WeatherApiService
 import com.weather.weatherapp.data.api.weather.TokenInterceptor
@@ -97,22 +98,23 @@ class DataModule {
 
     @Provides
     @Singleton
-    fun provideRepository(remoteDataSource: WeatherRemoteDataSource, prefsManager: PrefsManager, config: Config): Repository = Repository(remoteDataSource, prefsManager, config)
+    fun provideRepository(remoteDataSource: WeatherRemoteDataSource, configManager: ConfigManager): Repository = Repository(remoteDataSource, configManager)
 
     @Provides
     @Singleton
     fun provideSearchRepository(remoteDataSource: AreasRemoteDataSource): SearchRepository = SearchRepository(remoteDataSource)
 
-
     @Provides
     @Singleton
     fun provideConfig(prefsManager: PrefsManager): Config = prefsManager.buildConfig()
 
+    @Provides
+    @Singleton
+    fun provideConfigManager(prefsManager: PrefsManager) = ConfigManager(prefsManager)
 
     @Provides
     @Singleton
     fun provideSharedPreferences(context: Context): SharedPreferences = context.getSharedPreferences("prefs", Context.MODE_PRIVATE)
-
 
     @Provides
     @Singleton

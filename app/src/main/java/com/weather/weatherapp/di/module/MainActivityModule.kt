@@ -1,9 +1,7 @@
 package com.weather.weatherapp.di.module
 
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.data.datasource.MainRepository
-import com.weather.weatherapp.data.datasource.local.PrefsManager
-import com.weather.weatherapp.data.datasource.remote.WeatherRemoteDataSource
-import com.weather.weatherapp.data.models.Config
 import com.weather.weatherapp.ui.main.MainPresenter
 import dagger.Module
 import dagger.Provides
@@ -12,10 +10,10 @@ import dagger.Provides
 class MainActivityModule {
 
     @Provides
-    fun provideMainPresenter(repository: MainRepository): MainPresenter = MainPresenter(repository)
+    fun provideMainPresenter(repository: MainRepository) = MainPresenter(repository)
 
     @Provides
-    fun provideMainRepository(remoteDataSource: WeatherRemoteDataSource, prefsManager: PrefsManager, config: Config): MainRepository = MainRepository(prefsManager, config)
+    fun provideMainRepository(configManager: ConfigManager) = MainRepository(configManager)
 
 
 }

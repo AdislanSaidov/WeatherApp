@@ -8,6 +8,7 @@ import android.widget.RadioGroup
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
+import androidx.navigation.fragment.findNavController
 import com.weather.weatherapp.R
 import com.weather.weatherapp.databinding.FragmentSettingsBinding
 import com.weather.weatherapp.ui.base.BaseFragment
@@ -20,6 +21,7 @@ import com.weather.weatherapp.utils.Constants.MBAR
 import com.weather.weatherapp.utils.Constants.METERS
 import com.weather.weatherapp.utils.Constants.MILES
 import com.weather.weatherapp.utils.Constants.MMHG
+import com.weather.weatherapp.utils.Constants.SETTINGS_UPDATED_KEY
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
@@ -82,6 +84,7 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
             }
         }
         createDialog(v)
+        markChanged()
     }
 
     override fun showCurrentVisibilityUnit(unit: Int) {
@@ -99,6 +102,11 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
             }
         }
         createDialog(v)
+        markChanged()
+    }
+
+    private fun markChanged() {
+        findNavController().previousBackStackEntry?.savedStateHandle?.set(SETTINGS_UPDATED_KEY, true)
     }
 
     override fun showCurrentWindSpeedUnit(unit: Int) {
@@ -118,6 +126,7 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
             }
         }
         createDialog(v)
+        markChanged()
     }
 
 
@@ -138,6 +147,7 @@ class SettingsFragment: BaseFragment(), SettingsMvpView {
             }
         }
         createDialog(v)
+        markChanged()
     }
 
     override fun showCurrentUnits(settings: Settings) {

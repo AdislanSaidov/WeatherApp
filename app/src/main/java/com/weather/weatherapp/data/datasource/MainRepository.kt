@@ -1,13 +1,12 @@
 package com.weather.weatherapp.data.datasource
 
-import com.weather.weatherapp.data.datasource.local.PrefsManager
-import com.weather.weatherapp.data.models.Config
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.data.models.Coord
 
-class MainRepository(private val prefsManager: PrefsManager,  private val config: Config) {
+class MainRepository(private val configManager: ConfigManager) {
 
     fun storeLocation(coord: Coord){
-        config.coords = coord
+        configManager.config.coords = coord
     }
 
 }

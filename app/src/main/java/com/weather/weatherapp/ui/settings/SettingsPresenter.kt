@@ -1,8 +1,6 @@
 package com.weather.weatherapp.ui.settings
 
-import com.weather.weatherapp.data.datasource.Repository
-import com.weather.weatherapp.data.datasource.local.PrefsManager
-import com.weather.weatherapp.data.models.Config
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.ui.base.BasePresenter
 import com.weather.weatherapp.utils.Constants.CELSIUS
 import com.weather.weatherapp.utils.Constants.FAHRENHEIT
@@ -21,12 +19,11 @@ import moxy.InjectViewState
 
 @InjectViewState
 class SettingsPresenter(
-    private val repository: Repository,
-    private val prefsManager: PrefsManager,
+    private val configManager: ConfigManager,
     private val resourceManager: ResourceManager
 ) : BasePresenter<SettingsMvpView>() {
 
-    private lateinit var config: Config
+    private val config = configManager.config
 
     override fun onFirstViewAttach() {
         super.onFirstViewAttach()
@@ -34,7 +31,7 @@ class SettingsPresenter(
     }
 
     private fun fetchCurrentConfig() {
-        config = prefsManager.buildConfig()
+
         val currentTempMetric = when (config.tempMetric) {
             CELSIUS -> resourceManager.tempCelsius()
             FAHRENHEIT -> resourceManager.tempFahrenheit()
@@ -90,26 +87,22 @@ class SettingsPresenter(
     }
 
     fun saveTempChoice(temp: Int) {
-        config.tempMetric = temp
-        prefsManager.saveTempUnit(temp)
+        configManager.saveTempUnit(temp)
         fetchCurrentConfig()
     }
 
     fun saveWindSpeedChoice(wind: Int) {
-        config.windMetric = wind
-        prefsManager.saveWindSpeedUnit(wind)
+        configManager.saveWindSpeedUnit(wind)
         fetchCurrentConfig()
     }
 
     fun saveVisibilityChoice(visibility: Int) {
-        config.visibilityMetric = visibility
-        prefsManager.saveVisibilityUnit(visibility)
+        configManager.saveVisibilityUnit(visibility)
         fetchCurrentConfig()
     }
 
     fun savePressureChoice(pressure: Int) {
-        config.pressureMetric = pressure
-        prefsManager.savePressureUnit(pressure)
+        configManager.savePressureUnit(pressure)
         fetchCurrentConfig()
     }
 

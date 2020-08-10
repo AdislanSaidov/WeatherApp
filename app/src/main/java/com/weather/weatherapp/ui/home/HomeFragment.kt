@@ -7,6 +7,7 @@ import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.appcompat.view.ContextThemeWrapper
 import androidx.core.view.GravityCompat
+import androidx.lifecycle.Observer
 import androidx.navigation.fragment.findNavController
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.weather.weatherapp.R
@@ -14,24 +15,31 @@ import com.weather.weatherapp.databinding.FragmentHomeBinding
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.domain.models.UiWeatherData
 import com.weather.weatherapp.ui.base.BaseFragment
+import com.weather.weatherapp.utils.Constants.SETTINGS_UPDATED_KEY
 import moxy.presenter.InjectPresenter
 import moxy.presenter.ProvidePresenter
 import javax.inject.Inject
 
 
-class HomeFragment : BaseFragment(), HomeMvpView{
+class HomeFragment : BaseFragment(), HomeMvpView {
 
     @Inject
     @InjectPresenter
     lateinit var presenter: HomePresenter
+
     @Inject
     lateinit var forecastAdapter: ForecastAdapter
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        val contextThemeWrapper = ContextThemeWrapper(requireContext(), R.style.AppTheme_NoActionBar)
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        val contextThemeWrapper =
+            ContextThemeWrapper(requireContext(), R.style.AppTheme_NoActionBar)
 
         val localInflater = inflater.cloneInContext(contextThemeWrapper)
         setHasOptionsMenu(true)
@@ -43,24 +51,31 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         initForecasts()
         initDrawer()
         initBackButton()
-        binding.drawerContent.ivToolbarBack.setOnClickListener {
-            binding.drawer.closeDrawer(GravityCompat.START)
-        }
-        binding.drawerContent.ivToolbarSearch.setOnClickListener {
-            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        val navController = findNavController()
+        val savedStateHandle = navController.currentBackStackEntry?.savedStateHandle
+        savedStateHandle?.let {
+            it.getLiveData<Boolean>(SETTINGS_UPDATED_KEY)
+                .observe(viewLifecycleOwner, Observer { updated ->
+                    if (updated) {
+                        presenter.fetchData()
+                        it.set(SETTINGS_UPDATED_KEY, false)
+                    }
+                })
         }
     }
 
     private fun initBackButton() {
-        requireActivity().onBackPressedDispatcher.addCallback(viewLifecycleOwner, object : OnBackPressedCallback(true){
-            override fun handleOnBackPressed() {
-                if (binding.drawer.isDrawerOpen(GravityCompat.START)){
-                    binding.drawer.closeDrawer(GravityCompat.START)
-                }else{
-                    requireActivity().finish()
+        requireActivity().onBackPressedDispatcher.addCallback(
+            viewLifecycleOwner,
+            object : OnBackPressedCallback(true) {
+                override fun handleOnBackPressed() {
+                    if (binding.drawer.isDrawerOpen(GravityCompat.START)) {
+                        binding.drawer.closeDrawer(GravityCompat.START)
+                    } else {
+                        requireActivity().finish()
+                    }
                 }
-            }
-        })
+            })
     }
 
     private fun initDrawer() {
@@ -69,11 +84,19 @@ class HomeFragment : BaseFragment(), HomeMvpView{
         )
         binding.drawer.addDrawerListener(toggle)
         toggle.syncState()
+
+        binding.drawerContent.ivToolbarBack.setOnClickListener {
+            binding.drawer.closeDrawer(GravityCompat.START)
+        }
+        binding.drawerContent.ivToolbarSearch.setOnClickListener {
+            findNavController().navigate(R.id.action_homeFragment_to_searchFragment)
+        }
     }
 
     private fun initForecasts() {
         binding.rvMainForecast.adapter = forecastAdapter
-        binding.rvMainForecast.layoutManager = LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
+        binding.rvMainForecast.layoutManager =
+            LinearLayoutManager(requireContext(), LinearLayoutManager.HORIZONTAL, false)
     }
 
 
@@ -110,7 +133,7 @@ class HomeFragment : BaseFragment(), HomeMvpView{
     }
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        when(item.itemId){
+        when (item.itemId) {
             R.id.menu_settings -> {
                 findNavController().navigate(R.id.action_homeFragment_to_settingsFragment)
             }

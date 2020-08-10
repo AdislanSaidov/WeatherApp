@@ -1,5 +1,6 @@
 package com.weather.weatherapp.ui.home
 
+import com.weather.weatherapp.data.ConfigManager
 import com.weather.weatherapp.data.models.*
 import com.weather.weatherapp.domain.models.UiForecast
 import com.weather.weatherapp.domain.models.UiWeatherData
@@ -20,8 +21,9 @@ import kotlin.math.roundToInt
 class WeatherDataMapper(
         private val resourceManager: ResourceManager,
         private val metricsConverter: MetricsConverter,
-        private val config: Config
+        private val configManager: ConfigManager
 ) {
+    private val config = configManager.config
 
     fun toUiModel(weatherData: WeatherData): UiWeatherData {
 
