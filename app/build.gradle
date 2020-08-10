@@ -55,8 +55,8 @@ android {
 
 dependencies {
     def moxyVersion = '2.0.2'
-    def dagger = '2.27'
-    def navigation = '1.0.0'
+    def dagger = '2.28.3'
+    def navigation = '2.3.0-alpha02'
     def retrofit = '2.9.0'
     def okHttp = '4.8.0'
     def glide = '4.11.0'
